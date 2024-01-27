@@ -6,7 +6,7 @@ const VehicleInfoComponent = () => {
   useEffect(() => {
     const fetchVehicleInfo = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/vehicleInfo', {
+        const response = await fetch('http://192.168.55.112:3001/api/vehicleInfo', {
           method: 'GET',
           mode: 'cors',
           headers: {

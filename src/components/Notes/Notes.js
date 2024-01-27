@@ -5,7 +5,7 @@ import VehicleInfo from '../VehicleInfo/VehicleInfo';
 function Notes(){
     return (
         <div className='notesContainer'>
-            <div className="vehicleInfo">
+            <div className="vehicleInfo pt-1">
                 <VehicleInfo />
             </div>
         </div>
