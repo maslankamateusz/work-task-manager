@@ -15,8 +15,8 @@ function TaskItem(props){
                     <span className={"badge bg-"+ props.color}>
                         {props.status}
                     </span>
-                    <span className="mx-1">
-                        @{props.user}
+                    <span className="mx-2 ">
+                        {props.date}
                     </span>
                 </strong>
                 {props.name}

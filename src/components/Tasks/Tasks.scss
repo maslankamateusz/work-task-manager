@@ -4,5 +4,8 @@
     height: 100%;
     width: 100%;
 }
-
+.tasksListContainer{
+    overflow: auto;
+    height: 80%;
+}
 @import '~bootstrap/scss/bootstrap';
