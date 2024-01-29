@@ -10,7 +10,7 @@ function Tasks() {
   ]);
 
   function getTaskItems() {
-    return tasks.map(item => <TaskItem key={item.id} {...item} />);
+    return tasks.map(item => <TaskItem key={item.id} {...item} deleteNewTaskCallback={deleteTask}/>);
   }
 
   function createNewTask(task) {
@@ -21,9 +21,14 @@ function Tasks() {
     ]);
   }
 
+  function deleteTask(taskId){
+    const updatedTasks = tasks.filter(task => task.id !== taskId);
+    setTasks(updatedTasks);
+  }
+
   return (
     <div className="tasksContainer">
-      <TaskHeader createNewTaskCallback={createNewTask} />
+      <TaskHeader createNewTaskCallback={createNewTask}  />
       <div className='my-3 mx-2 p-3 bg-body rounded shadow-sm'>
         {getTaskItems()}
       </div>
