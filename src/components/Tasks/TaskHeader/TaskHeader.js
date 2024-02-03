@@ -35,7 +35,7 @@ function TaskHeader(props) {
   }
 
   return (
-    <div className="container">
+    <div className="container mt-0 mt-lg-4">
       <div className="my-3 p-3 bg-body rounded shadow-sm">
         <div className="input-group input-group-sm">
           <span className="input-group-text bg-light">Task:</span>

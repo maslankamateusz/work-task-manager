@@ -3,7 +3,7 @@ import "./Timers.scss";
 
 function Timers(){
     return (
-        <div className='timersContainer'>timersContainer</div>
+        <div className='timersContainer mb-4 mb-lg-0'>timersContainer</div>
     )
 }
 
