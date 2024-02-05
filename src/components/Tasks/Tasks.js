@@ -10,7 +10,9 @@ function Tasks() {
     ]);
     
     function getTaskItems() {
-      return tasks.map(item => <TaskItem key={item.id} {...item} deleteNewTaskCallback={deleteTask} />);
+      return tasks.map((item, index) => (
+        <TaskItem key={item.id} id={index} {...item} deleteNewTaskCallback={deleteTask} />
+      ));
     }
   
     function createNewTask(task) {
@@ -23,7 +25,10 @@ function Tasks() {
   
     function deleteTask(taskId) {
       const updatedTasks = tasks.filter(task => task.id !== taskId);
-      setTasks(updatedTasks);
+      
+      const updatedTasksWithNumbers = updatedTasks.map((task, index) => ({ ...task, id: index }));
+      
+      setTasks(updatedTasksWithNumbers);
     }
   
     return (
@@ -34,7 +39,6 @@ function Tasks() {
         </div>
       </div>
     );
-  }
-  
+}
 
 export default Tasks;

@@ -71,17 +71,19 @@ function TaskHeader(props) {
             placeholder='Task name'
             value={newTasks.newTaskName}
             onChange={updateNewTask}
+            maxLength={30}
           />
           <input
             type="date"
             className='form-control form-control-sm ps-2'
             id="task-date"
             onChange={(e) => setNewTasks((prev) => ({ ...prev, newTaskDate: e.target.value }))}
+            min={getTodayDate()}
           />
           <select
             id="taskStatus"
             onChange={(e) => setNewTasks((prev) => ({ ...prev, newTaskStatus: e.target.value }))}
-            className='form-select ps-3 w-25 select-status'>
+            className='form-select ps-3 select-status'>
             <option value="to-do">To do</option>
             <option value="planed">Planed</option>
             <option value="in-progress">In progress</option>
