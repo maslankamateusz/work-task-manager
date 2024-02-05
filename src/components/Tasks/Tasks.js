@@ -29,7 +29,7 @@ function Tasks() {
     return (
       <div className="tasksContainer">
         <TaskHeader createNewTaskCallback={createNewTask} />
-        <div className='my-3 mx-2 p-3 bg-body rounded shadow-sm tasksListContainer'>
+        <div className='mx-0 mx-lg-2 p-3 bg-body rounded shadow-sm h-75 mt-0 mt-lg-4 tasksListContainer mb-5'>
           {tasks.length > 0 ? getTaskItems() : <h5 className='text-center'>Wszystkie zadania wykonane!</h5>}
         </div>
       </div>

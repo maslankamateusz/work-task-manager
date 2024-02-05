@@ -19,7 +19,7 @@ function TaskItem(props){
                         {props.date}
                     </span>
                 </strong>
-                {props.name}
+                {"test"}
             </p>
             <div className='m-1'>
                 <button className='btn btn-sm btn-outline-danger' onClick={deleteTask}>
