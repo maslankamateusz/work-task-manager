@@ -11,6 +11,10 @@ function TaskItem(props){
         props.deleteNewTaskCallback(taskId);
     }
     function editTask(){
+        if (props.editingTaskId !== null) { 
+            return; 
+        }
+        props.setEditingTaskId(props.id);
         setIsEditing(!isEditing);
     }
     function getTaskNumber(){
@@ -19,7 +23,7 @@ function TaskItem(props){
     getTaskNumber();
     if(isEditing){
         return(
-            <TaskItemEdit />
+            <TaskItemEdit {...props}/>
         )
     } else{
         
@@ -29,7 +33,7 @@ function TaskItem(props){
                     <p className='flex-grown-1 mb-0 pb-3 mx-2 small lh-sm text-start'>
                         <strong className='d-block my-1'>
                             <span className={"badge bg-"+ props.color}>
-                                {props.status}
+                                {props.status.charAt(0).toUpperCase() + props.status.slice(1).toLowerCase()}
                             </span>
                             <span className="mx-2 ">
                                 {props.date}

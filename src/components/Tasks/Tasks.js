@@ -5,13 +5,21 @@ import TaskItem from './TaskItem/TaskItem';
 
 function Tasks() {
     const [tasks, setTasks] = React.useState([
-      { id: 0, name: "Task 1", date: "30.01", status: "ToDo", color: "primary" },
+      { id: 0, name: "Task 1", date: "30.01", status: "To-do", color: "warning" },
       { id: 1, name: "Task 2", date: "03.02", status: "Done", color: "success" }
     ]);
+    const [editingTaskId, setEditingTaskId] = React.useState(null);
     
     function getTaskItems() {
       return tasks.map((item, index) => (
-        <TaskItem key={item.id} id={index} {...item} deleteNewTaskCallback={deleteTask} />
+        <TaskItem 
+          key={item.id} 
+          id={index} 
+          {...item} 
+          deleteNewTaskCallback={deleteTask} 
+          editingTaskId={editingTaskId} 
+          setEditingTaskId={setEditingTaskId} 
+        />
       ));
     }
   
@@ -19,7 +27,7 @@ function Tasks() {
       const newId = tasks.length;
       setTasks(prevTasks => [
         ...prevTasks,
-        { id: newId, name: task.newTaskName, date: task.date, status: task.status, color: task.color }
+        { id: newId, name: task.newTaskName, date: task.date,nonFormattedDate: task.nonFormattedDate, status: task.status, color: task.color }
       ]);
     }
   

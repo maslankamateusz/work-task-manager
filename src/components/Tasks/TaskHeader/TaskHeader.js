@@ -38,6 +38,7 @@ function TaskHeader(props) {
 
     props.createNewTaskCallback({
       newTaskName: newTasks.newTaskName,
+      nonFormattedDate: newTasks.newTaskDate,
       date: formattedDate,
       color: getTaskColor(newTasks.newTaskStatus),
       status: newTasks.newTaskStatus,
