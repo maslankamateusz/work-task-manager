@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./TaskHeader.scss";
 
 function TaskHeader(props) {
-  const [newTasks, setNewTasks] = useState({
+  const [newTasks, setNewTasks] = React.useState({
     newTaskName: "",
     newTaskDate: getTodayDate(),
     newTaskStatus: "", 
@@ -15,7 +15,7 @@ function TaskHeader(props) {
     { status: "done", color: "success" }
   ];
 
-  const [defaultValuesSet, setDefaultValuesSet] = useState(false);
+  const [defaultValuesSet, setDefaultValuesSet] = React.useState(false);
 
   useEffect(() => {
     if (!defaultValuesSet) {
