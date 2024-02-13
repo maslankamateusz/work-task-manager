@@ -22,9 +22,13 @@ function TaskItem(props) {
     return (
         <div>
             {isEditing ? (
-                <TaskItemEdit {...props} setIsEditing={setIsEditing} />
+                <TaskItemEdit
+                {...props}
+                setIsEditing={setIsEditing}
+                saveEditedTask={props.saveEditedTask} 
+            />
             ) : (
-                <div className='d-flex pt-2 border-bottom justify-content-between' id={props.id}>
+                <div key={props.id} className='d-flex pt-2 border-bottom justify-content-between' id={props.id}>
                     <div className='w-20'>
                         <p className='flex-grown-1 mb-0 pb-3 mx-2 small lh-sm text-start'>
                             <strong className='d-block my-1'>
