@@ -21,21 +21,14 @@ function TaskItemEdit(props) {
     }
 
     function saveEditTask() {
-        props.editTask({
-            editedTaskId: props.id,
-            editedTaskName: editTasks.editTaskName,
-            editedNonFormattedDate: editTasks.editTaskDate,
-            editedDate: formatDate(editTasks.editTaskDate),
-            editedColor: getTaskColor(editTasks.editTaskStatus),
-            editedStatus: editTasks.editTaskStatus
-        });
-        setEditTasks({ editTaskName: "", editTaskDate: "", editTaskStatus: "" });
+        const updatedTask = {
+            editTaskName: editTasks.editTaskName,
+            editTaskDate: editTasks.editTaskDate,
+            editTaskStatus: editTasks.editTaskStatus
+        };
+        const taskId = props.id;
+        props.saveEditedTask(updatedTask, taskId);
         props.setIsEditing(false);
-    }
-
-    function formatDate(date) {
-        const [year, month, day] = date.split("-");
-        return `${day}.${month}`;
     }
 
     return (
@@ -57,13 +50,13 @@ function TaskItemEdit(props) {
                             type="date"
                             className="form-control form-control-sm ps-2"
                             id="task-date"
-                            value={String(editTasks.editTaskDate)}
+                            value={editTasks.editTaskDate}
                             onChange={(e) => setEditTasks({ ...editTasks, editTaskDate: e.target.value })}
                         />
                         <select
                             id="taskStatus"
                             className="form-select ps-3 select-status"
-                            value={editTasks.editTaskStatus.toLowerCase()}
+                            value={editTasks.editTaskStatus}
                             onChange={(e) => setEditTasks({ ...editTasks, editTaskStatus: e.target.value })}
                         >
                             <option value="to-do">To do</option>
@@ -82,3 +75,4 @@ function TaskItemEdit(props) {
 }
 
 export default TaskItemEdit;
+
