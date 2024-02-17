@@ -6,8 +6,8 @@ function TaskItem(props) {
     const [isEditing, setIsEditing] = React.useState(false);
 
     function deleteTask() {
-        let taskId = props.id;
-        props.deleteNewTaskCallback(taskId);
+        let taskId = props._id;
+        props.deleteTask(taskId);
     }
 
     function editTask() {

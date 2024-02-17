@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./TaskHeader.scss";
+import {getTaskColor, getTodayDate, formatDate} from "../taskUtils/taskUtils.js";
 
 function TaskHeader(props) {
   const [newTasks, setNewTasks] = React.useState({
@@ -7,13 +8,6 @@ function TaskHeader(props) {
     newTaskDate: getTodayDate(),
     newTaskStatus: "", 
   });
-
-  const taskColors = [
-    { status: "to-do", color: "warning" },
-    { status: "planed", color: "secondary" },
-    { status: "in-progress", color: "primary" },
-    { status: "done", color: "success" }
-  ];
 
   const [defaultValuesSet, setDefaultValuesSet] = React.useState(false);
 
@@ -23,11 +17,6 @@ function TaskHeader(props) {
       setDefaultValuesSet(true);
     }
   }, [defaultValuesSet]);
-
-  function getTaskColor(taskStatus) {
-    const matchingColor = taskColors.find((item) => item.status === taskStatus);
-    return matchingColor ? matchingColor.color : "secondary";
-  }
 
   function updateNewTask(event) {
     setNewTasks((prev) => ({ ...prev, newTaskName: event.target.value }));
@@ -45,19 +34,6 @@ function TaskHeader(props) {
     });
 
     setNewTasks((prev) => ({ ...prev, newTaskName: "" }));
-  }
-
-  function getTodayDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function formatDate(date) {
-    const [year, month, day] = date.split("-");
-    return `${day}.${month}`;
   }
 
   return (
