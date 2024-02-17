@@ -20,46 +20,13 @@ function Tasks() {
                 throw new Error('Failed to fetch tasks');
             }
             const tasksData = await response.json();
-            setTasks(tasksData);
+            setTasks(tasksData); 
         } catch (error) {
             console.error('Error fetching tasks:', error);
+            throw error; 
         }
     };
-
-    const editTask = (taskId, updatedTask) => {
-        const updatedTasks = tasks.map(task => {
-            if (task.id === taskId) {
-                return { ...task, ...updatedTask };
-            }
-            return task;
-        });
-        setTasks(updatedTasks);
-    };
-
-    const saveEditedTask = async (taskId, updatedTask) => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedTask),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to update task');
-            }
-            console.log('Task updated successfully');
-        } catch (error) {
-            console.error('Error updating task:', error);
-        }
-    };
-
-    const deleteTask = (taskId) => {
-        const updatedTasks = tasks.filter(task => task.id !== taskId);
-        const updatedTasksWithNumbers = updatedTasks.map((task, index) => ({ ...task, id: index }));
-        setTasks(updatedTasksWithNumbers);
-    };
-
+    
     const createNewTask = (task) => {
         fetch('http://localhost:5000/api/tasks', {
             method: 'POST',
@@ -82,15 +49,43 @@ function Tasks() {
             return response.json();
         })
         .then(newTask => {
-            setTasks(prevTasks => [
-                ...prevTasks,
-                newTask
-            ]);
+            setTasks(prevTasks => [...prevTasks, newTask]); 
         })
         .catch(error => {
             console.error('Error creating new task:', error);
         });
     };
+
+    const editTask = async (taskId, task) => {
+        try {
+            
+            await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(task)
+            });
+            await fetchTasksFromServer();
+        } catch (error) {
+            console.error('Error editing task:', error);
+        }
+    }
+
+    const deleteTask = async (taskId) => {
+        try {
+            await fetch(`http://localhost:5000/api/tasks/delete/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            await fetchTasksFromServer();
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+    }
+    
 
     const getTaskItems = () => {
         if (tasks.length === 0) return null; 
@@ -100,15 +95,13 @@ function Tasks() {
                 id={index} 
                 {...item}
                 nonFormattedDate={editingTaskId !== null ? tasks[editingTaskId].nonFormattedDate : null}
-                deleteNewTaskCallback={deleteTask}
+                deleteTask={deleteTask}
                 editingTaskId={editingTaskId}
                 setEditingTaskId={setEditingTaskId}
                 editTask={editTask}
-                saveEditedTask={saveEditedTask}
             />
         ));
     };
-
     return (
         <div className="tasksContainer">
             <TaskHeader createNewTaskCallback={createNewTask} />

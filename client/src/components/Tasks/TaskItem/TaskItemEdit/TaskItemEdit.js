@@ -1,5 +1,6 @@
 import React from 'react';
 import "./TaskItemEdit.scss";
+import {getTaskColor, formatDate} from "../../taskUtils/taskUtils.js";
 
 function TaskItemEdit(props) {
     const [editTasks, setEditTasks] = React.useState({
@@ -7,28 +8,17 @@ function TaskItemEdit(props) {
         editTaskDate: props.nonFormattedDate,
         editTaskStatus: props.status,
     });
-
-    const taskColors = [
-        { status: "to-do", color: "warning" },
-        { status: "planed", color: "secondary" },
-        { status: "in-progress", color: "primary" },
-        { status: "done", color: "success" },
-    ];
-
-    function getTaskColor(taskStatus) {
-        const matchingColor = taskColors.find((item) => item.status === taskStatus);
-        return matchingColor ? matchingColor.color : "secondary";
-    }
-
+    
     function saveEditTask() {
-        const updatedTask = {
-            editTaskName: editTasks.editTaskName,
-            editTaskDate: editTasks.editTaskDate,
-            editTaskStatus: editTasks.editTaskStatus
+        const updateEditedTask = {
+            name: editTasks.editTaskName,
+            date: formatDate(editTasks.editTaskDate),
+            nonFormattedDate: editTasks.editTaskDate,
+            status: editTasks.editTaskStatus,
+            color: getTaskColor(editTasks.editTaskStatus)
         };
-        const taskId = props.id;
-        props.saveEditedTask(updatedTask, taskId);
-        props.setIsEditing(false);
+        props.editTask(props._id, updateEditedTask);
+        props.setIsEditing(false);  
     }
 
     return (

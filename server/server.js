@@ -60,18 +60,18 @@ app.put('/api/tasks/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/tasks/:id', async (req, res) => {
+app.delete('/api/tasks/delete/:id', async (req, res) => {
     try {
-        const task = await Task.findById(req.params.id);
-        if (task == null) {
+        const deleteTask = await Task.deleteOne({_id:req.params.id});
+        if (deleteTask == null) {
             return res.status(404).json({ message: 'Task not found' });
         }
-        await task.remove();
-        res.json({ message: 'Task deleted' });
+        res.json({ message: 'Task deleted successfully' });
     } catch (err) {
         return res.status(500).json({ message: err.message });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
