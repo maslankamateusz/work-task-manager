@@ -1,66 +1,107 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./Tasks.scss";
 import TaskHeader from './TaskHeader/TaskHeader';
 import TaskItem from './TaskItem/TaskItem';
 
 function Tasks() {
-    const [tasks, setTasks] = React.useState([
-        { id: 0, name: "Task 1", date: "30.01", nonFormattedDate: "2023-01-30", status: "To-do", color: "warning" },
-        { id: 1, name: "Task 2", date: "03.02", nonFormattedDate: "2023-02-03", status: "Done", color: "success" }
-    ]);
+    const [tasks, setTasks] = React.useState([]);
     const [editingTaskId, setEditingTaskId] = React.useState(null);
 
-    function getTaskItems() {
+    useEffect(() => {
+        if (tasks.length === 0) {
+            fetchTasksFromServer();
+        }
+    }, [tasks]);
+
+    const fetchTasksFromServer = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/tasks');
+            if (!response.ok) {
+                throw new Error('Failed to fetch tasks');
+            }
+            const tasksData = await response.json();
+            setTasks(tasksData); 
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+            throw error; 
+        }
+    };
+    
+    const createNewTask = (task) => {
+        fetch('http://localhost:5000/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: task.newTaskName,
+                date: task.date,
+                nonFormattedDate: task.nonFormattedDate,
+                status: task.status,
+                color: task.color
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to create new task');
+            }
+            console.log('New task created successfully');
+            return response.json();
+        })
+        .then(newTask => {
+            setTasks(prevTasks => [...prevTasks, newTask]); 
+        })
+        .catch(error => {
+            console.error('Error creating new task:', error);
+        });
+    };
+
+    const editTask = async (taskId, task) => {
+        try {
+            
+            await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(task)
+            });
+            await fetchTasksFromServer();
+        } catch (error) {
+            console.error('Error editing task:', error);
+        }
+    }
+
+    const deleteTask = async (taskId) => {
+        try {
+            await fetch(`http://localhost:5000/api/tasks/delete/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            await fetchTasksFromServer();
+        } catch (error) {
+            console.error('Error deleting task:', error);
+        }
+    }
+    
+
+    const getTaskItems = () => {
         if (tasks.length === 0) return null; 
         return tasks.map((item, index) => (
             <TaskItem
-                key={item.id}
-                id={index}
+                key={item._id} 
+                id={index} 
                 {...item}
                 nonFormattedDate={editingTaskId !== null ? tasks[editingTaskId].nonFormattedDate : null}
-                deleteNewTaskCallback={deleteTask}
+                deleteTask={deleteTask}
                 editingTaskId={editingTaskId}
                 setEditingTaskId={setEditingTaskId}
                 editTask={editTask}
             />
         ));
-    }
-
-    function createNewTask(task) {
-        const newId = tasks.length;
-        setTasks(prevTasks => [
-            ...prevTasks,
-            { id: newId, name: task.newTaskName, date: task.date, nonFormattedDate: task.nonFormattedDate, status: task.status, color: task.color }
-        ]);
-    }
-
-    function editTask(task) {
-        const updatedTasks = tasks.map((item) => {
-            if (item.id === task.editedTaskId) {
-                return {
-                    ...item,
-                    name: task.editedTaskName,
-                    date: task.editedDate,
-                    nonFormattedDate: task.editedNonFormattedDate,
-                    status: task.editedStatus,
-                    color: task.editedColor
-                };
-            } else {
-                return item;
-            }
-        });
-
-        setTasks(updatedTasks);
-    }
-  
-    function deleteTask(taskId) {
-        const updatedTasks = tasks.filter(task => task.id !== taskId);
-
-        const updatedTasksWithNumbers = updatedTasks.map((task, index) => ({ ...task, id: index }));
-
-        setTasks(updatedTasksWithNumbers);
-    }
-
+    };
     return (
         <div className="tasksContainer">
             <TaskHeader createNewTaskCallback={createNewTask} />
