@@ -4,13 +4,7 @@
     height: 25vh;
     width: 100%;
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     padding-top: 5%;
 }
-.vehicleInfo{
-    width: 100%;
-    text-align: center
-
-}
-
 @import '~bootstrap/scss/bootstrap';
