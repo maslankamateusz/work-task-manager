@@ -1,11 +1,9 @@
-import React from 'react';
-import "./Notes.scss";
 
 function Notes(){
 
 
     return (
-        <div className='notesContainer mb-4 mb-lg-0' >
+        <div className="bg-blue-300 h-80 w-full p-5 " >
             notes
         </div>
     )

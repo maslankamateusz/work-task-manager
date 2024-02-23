@@ -1,9 +1,9 @@
-import React from 'react';
+import {useState} from 'react';
 import "./TaskItem.scss";
 import TaskItemEdit from "./TaskItemEdit/TaskItemEdit";
 
 function TaskItem(props) {
-    const [isEditing, setIsEditing] = React.useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     function deleteTask() {
         let taskId = props._id;

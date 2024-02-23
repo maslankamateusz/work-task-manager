@@ -1,9 +1,7 @@
-import React from 'react';
-import "./Timers.scss";
 
 function Timers(){
     return (
-        <div className='timersContainer mb-4 mb-lg-0'>timersContainer</div>
+        <div className=' mb-5 lg:mb-0 bg-purple-300 h-72 w-full p-5 '>timersContainer</div>
     )
 }
 

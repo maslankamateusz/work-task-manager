@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import "./TaskHeader.scss";
 import {getTaskColor, getTodayDate, formatDate} from "../taskUtils/taskUtils.js";
 
+//import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 function TaskHeader(props) {
-  const [newTasks, setNewTasks] = React.useState({
+  const [newTasks, setNewTasks] = useState({
     newTaskName: "",
     newTaskDate: getTodayDate(),
     newTaskStatus: "", 
   });
 
-  const [defaultValuesSet, setDefaultValuesSet] = React.useState(false);
+  const [defaultValuesSet, setDefaultValuesSet] = useState(false);
 
   useEffect(() => {
     if (!defaultValuesSet) {
@@ -37,10 +40,11 @@ function TaskHeader(props) {
   }
 
   return (
+    
     <div className="container mt-0 mt-lg-4">
-      <div className="my-3 p-3 bg-body rounded shadow-sm">
+      <div className="my-3 p-3 bg-body rounded ">
         <div className="input-group input-group-sm">
-          <span className="input-group-text bg-light">Task:</span>
+          <span className="input-group-text ">Task:</span>
           <input
             type="text"
             className='form-control w-auto'

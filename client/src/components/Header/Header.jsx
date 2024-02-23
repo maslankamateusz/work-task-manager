@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import "./Header.scss";
+import 'tailwindcss/tailwind.css';
+
 
 function Header() {
     const [time, setTime] = useState(formatTime());
@@ -15,16 +17,12 @@ function Header() {
     }, []); 
 
     return (
-        <div className="header container-fluid ">
-          <div className="row no-gutters d-flex align-items-center justify-content-between">
-            <div className="col-md-7 col-12">
-              <span className="h1 h1-md text-center text-md-end px-md-5">Hello, today is a {weekdayName}</span>
-            </div>
-            <div className="col-md-5 col-12 bg">
-              <span className="display-4 display-md-4 text-center text-md-start px-md-5">{todayDate} {time}</span>
-            </div>
-          </div>
-        </div>
+      <div className="header h-48 w-full flex justify-center items-center flex-col md:flex-row">
+        <span className="text-5xl text-center md:text-7xl px-5 mb-3 md:mb-0">Hello, today is a {weekdayName}</span>
+        <span className="text-4xl md:text-6xl mb-1 px-5 ">{todayDate} {time}</span>
+      </div>   
+
+    
       );
       
 }

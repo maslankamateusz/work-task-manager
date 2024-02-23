@@ -1,28 +1,39 @@
-
-div.mainContainer{
+.mainContainer {
     width: 90vw;
-    height: 73vh;
-    margin: 7vh 5vw 5vh 5vw; 
+    height: 75vh;
+    margin: 0vh 5vw 5vh 5vw;
     display: flex;
-
-}
-.leftZone{
-    background-color: #e0e1f7;
+  
+    @media (max-width: 768px) {
+      flex-direction: column;
+      height: auto;
+    }
+  }
+  
+  .leftZone {
+    background-color: #d8d8ef;
     width: 50vw;
-    height: 100%;
-    padding: 3vh 3vw 3vh 3vw;
+    height: 75vh;
+    padding: 3vh 3vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-}
-.rightZone{
+  
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+  
+  .rightZone {
     background-color: #7c7c7c;
     width: 50vw;
-    height: 100%;
-    padding: 3vh 3vw 3vh 3vw;
+    height: 75vh;
+    padding: 3vh 3vw;
     display: flex;
-}
-
-
-@import "node_modules/bootstrap/scss/bootstrap";
+  
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+  
