@@ -5,7 +5,7 @@ function Notes(){
 
 
     return (
-        <div className='notesContainer mb-4 mb-lg-0' >
+        <div className="bg-blue-300 h-1/2 w-full flex items-start pt-5" >
             notes
         </div>
     )
