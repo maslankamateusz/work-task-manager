@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import "./Header.scss";
 import 'tailwindcss/tailwind.css';
 
 
