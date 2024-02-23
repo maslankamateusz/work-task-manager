@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import "./Header.scss";
+import 'tailwindcss/tailwind.css';
 
 
 function Header() {
@@ -17,7 +19,7 @@ function Header() {
     return (
       <div className="header h-48 w-full flex justify-center items-center flex-col md:flex-row">
         <span className="text-5xl text-center md:text-7xl px-5 mb-3 md:mb-0">Hello, today is a {weekdayName}</span>
-        <span className="text-4xl md:text-6xl px-5 mt-3">{todayDate} {time}</span>
+        <span className="text-4xl md:text-6xl mb-1 px-5 ">{todayDate} {time}</span>
       </div>   
 
     

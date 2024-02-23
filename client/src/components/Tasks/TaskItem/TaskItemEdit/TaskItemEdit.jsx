@@ -1,9 +1,9 @@
-import React from 'react';
+import {useState} from 'react';
 import "./TaskItemEdit.scss";
 import {getTaskColor, formatDate} from "../../taskUtils/taskUtils.js";
 
 function TaskItemEdit(props) {
-    const [editTasks, setEditTasks] = React.useState({
+    const [editTasks, setEditTasks] = useState({
         editTaskName: props.name,
         editTaskDate: props.nonFormattedDate,
         editTaskStatus: props.status,

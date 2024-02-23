@@ -1,4 +1,3 @@
-import React from 'react';
 import "./Main.scss";
 import Timers from '../Timers/Timers';
 import Notes from '../Notes/Notes';

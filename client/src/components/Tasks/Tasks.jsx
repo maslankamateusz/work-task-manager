@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import "./Tasks.scss";
+import { useState, useEffect } from 'react';
 import TaskHeader from './TaskHeader/TaskHeader';
 import TaskItem from './TaskItem/TaskItem';
 
 function Tasks() {
-    const [tasks, setTasks] = React.useState([]);
-    const [editingTaskId, setEditingTaskId] = React.useState(null);
+    const [tasks, setTasks] = useState([]);
+    const [editingTaskId, setEditingTaskId] = useState(null);
 
     useEffect(() => {
         if (tasks.length === 0) {
@@ -103,12 +102,13 @@ function Tasks() {
         ));
     };
     return (
-        <div className="tasksContainer">
+        <div class="ms-2 h-full w-full bg-red-100	">
             <TaskHeader createNewTaskCallback={createNewTask} />
             <div className='mx-0 mx-lg-2 p-3 bg-body rounded shadow-sm h-75 mt-0 mt-lg-4 tasksListContainer mb-5'>
                 {getTaskItems() || <h5 className='text-center'>Wszystkie zadania wykonane!</h5>}
             </div>
         </div>
+
     );
 }
 
