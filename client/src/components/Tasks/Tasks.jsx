@@ -102,7 +102,7 @@ function Tasks() {
         ));
     };
     return (
-        <div class="ms-2 h-full w-full bg-red-100	">
+        <div className="ms-2 h-full w-full bg-red-100	">
             <TaskHeader createNewTaskCallback={createNewTask} />
             <div className='mx-0 mx-lg-2 p-3 bg-body rounded shadow-sm h-75 mt-0 mt-lg-4 tasksListContainer mb-5'>
                 {getTaskItems() || <h5 className='text-center'>Wszystkie zadania wykonane!</h5>}
