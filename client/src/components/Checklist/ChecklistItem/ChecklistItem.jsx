@@ -9,7 +9,7 @@ function ChecklistItem({ item, changeEditItemStatus, isEditing, editItem }) {
 
     if(!isEditing){
         return (
-            <li className="flex w-full items-center justify-center gap-2.5 border-b-2 bg-white px-3 py-3.5 hover:border-gray-400">
+            <li className="flex w-full items-center justify-center gap-2.5 border-b-2 bg-white px-3 py-2.5 hover:border-gray-400">
                 <input
                     type="checkbox"
                     id={`checkbox${item.id}`}
@@ -19,7 +19,7 @@ function ChecklistItem({ item, changeEditItemStatus, isEditing, editItem }) {
                 />
                 <label
                     onClick={changeEditItemStatus}
-                    className={"w-full font-medium text-gray-600 peer-checked:text-gray-400 peer-checked:line-through cursor-text"}
+                    className={"w-full font-medium ms-2 text-gray-600 peer-checked:text-gray-400 peer-checked:line-through cursor-text"}
                 >
                     {item.name}
                 </label>
@@ -27,7 +27,7 @@ function ChecklistItem({ item, changeEditItemStatus, isEditing, editItem }) {
         )
     } else{
         return(
-            <li className="flex w-full items-center justify-center gap-2.5 border-b-2 bg-white px-3 py-3.5 hover:border-gray-400">
+            <li className="flex w-full items-center justify-center gap-2.5 border-b-2 bg-white px-3 py-2.5 hover:border-gray-400">
                 <input
                     type="checkbox"
                     id={`checkbox${item.id}`}
@@ -36,11 +36,11 @@ function ChecklistItem({ item, changeEditItemStatus, isEditing, editItem }) {
                   hover:ring-gray-300 focus:outline-none"
                 />
                 <input
-                    className={"w-full outline-none border-transparent font-medium text-gray-600 peer-checked:text-gray-400 peer-checked:line-through "}
+                    className={"w-full ms-2 outline-none border-transparent font-medium text-gray-600 peer-checked:text-gray-400 peer-checked:line-through "}
                     defaultValue={item.name}
                     autoFocus
                     onBlur={(event) => editItem(item.id, event.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyUp={handleKeyPress}
 
                 />
             </li>   

@@ -6,6 +6,7 @@ const app = express();
 app.use(cors());
 
 const Task = require('./models/Task');
+const Checklist = require('./models/Checklist')
 const PORT = 5000;
 
 app.use(express.json());
@@ -25,6 +26,7 @@ app.get('/api/tasks', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 app.post('/api/tasks', async (req, res) => {
     const task = new Task({
