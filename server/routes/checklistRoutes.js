@@ -38,38 +38,17 @@ router.put('/:id', async (req, res) => {
         return res.status(500).json({ message: err.message });
     }
 });
-router.delete('/:id', async (req, res) => {
+
+router.post('/del', async (req, res) => {
+    const checklistItemId = req.body.id;
     try {
-        const deleteChecklistItem = await Checklist.deleteOne({_id:req.params.id});
-        if (deleteChecklistItem == null) {
-            return res.status(404).json({ message: 'ChecklistItem not found' });
+        const deleteChecklistItemId = await Checklist.deleteOne({_id:checklistItemId});
+        if (deleteChecklistItemId == null) {
+            return res.status(404).json({ message: 'Checklist Item not found' });
         }
-        res.json({ message: 'ChecklistItem deleted successfully' });
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
-
-router.put('/', async (req, res) => {
-    try {
-        // Usuwanie wszystkich istniejących elementów z kolekcji
-        await Checklist.deleteMany({});
-
-        // Przekształcenie elementów przekazanych w żądaniu na obiekty typu Checklist
-        const checklistObjects = req.body.map(item => ({
-            name: item.name,
-            isEditing: item.isEditing
-        }));
-
-        // Zapisanie nowej kolekcji do bazy danych
-        await Checklist.insertMany(checklistObjects);
-
-        res.json({ message: 'Checklist collection updated successfully' });
-    } catch (error) {
-        console.error('Error updating checklist collection:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
-
 
 module.exports = router;

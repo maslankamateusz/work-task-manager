@@ -22,13 +22,14 @@ db.once('open', function() {
 app.use('/api/tasks', taskRoutes);
 app.post('/api/tasks', taskRoutes);
 app.put('/api/tasks', taskRoutes);
-app.delete('/api/tasks/delete', taskRoutes);
+app.post('/api/tasks', taskRoutes);
+
 
 app.use('/api/checklist', checklistRoutes);
 app.post('/api/checklist', checklistRoutes);
 app.put('/api/checklist', checklistRoutes);
-app.delete('/api/checklist/delete', checklistRoutes);
-app.put('/api/ckecklist/update', checklistRoutes)
+app.post('/api/checklist', checklistRoutes);
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

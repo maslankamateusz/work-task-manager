@@ -63,20 +63,23 @@ function Checklist() {
       )
     );
   }
-  async function deleteItem(_id) {
-    setChecklistItems(prev => prev.filter(item => item._id !== _id));
-    //delete error
-    /*console.log(_id);
-    try {
-      await fetch(`http://localhost:5000/api/checklist/delete/${_id}`, {
-          method: 'DELETE',
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      });
-    } catch (error) {
-        console.error('Error deleting checklist item:', error);
-    }*/
+  async function deleteItem(checklistItemId) {
+    setChecklistItems(prev => prev.filter(item => item._id !== checklistItemId));
+
+      try {
+        await fetch('http://localhost:5000/api/checklist/del', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: checklistItemId,
+            }),
+        })
+        console.log("dlaczego nie mogę wypisać czegoklowiek do konsoli?");
+      } catch (error) {
+        console.error('Error deleting task:', error);
+    }
   }
 
   async function editItem(_id, value) {
@@ -92,17 +95,22 @@ function Checklist() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(item)
-        });
-        changeEditItemStatus(_id);
-        setChecklistItems(prev => {
-          const index = prev.findIndex(item => item._id === _id);
-          if (index !== -1) {
-            const updatedItems = [...prev];
-            updatedItems[index] = { ...updatedItems[index], name: value };
-            return updatedItems;
+        }).then(response => {
+          if (response.ok) {
+            changeEditItemStatus(_id);
+            setChecklistItems(prev => {
+              const index = prev.findIndex(item => item._id === _id);
+              if (index !== -1) {
+                const updatedItems = [...prev];
+                updatedItems[index] = { ...updatedItems[index], name: value };
+                return updatedItems;
+              } else {
+                return prev;
+              }});
           } else {
-            return prev;
-          }});
+            throw new Error('Failed to delete item');
+          }
+        });
       } catch (error) {
         console.error('Error editing checklist item:', error);
       }
@@ -113,14 +121,12 @@ function Checklist() {
  }
   
   return (
-    
     <div className="bg-green-300 w-2/5 ">
       <div className="pt-3">
         <p className="text-center text-3xl">Daily Checklist</p>
       </div>
       <ul className="w-full px-2.5">
         {checklistItems.map(item => (
-          
           <ChecklistItem
             key={item._id}
             item={item}
