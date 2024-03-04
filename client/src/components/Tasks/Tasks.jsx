@@ -6,6 +6,7 @@ import TaskItem from './TaskItem/TaskItem';
 function Tasks() {
     const [tasks, setTasks] = useState([]);
     const [editingTaskId, setEditingTaskId] = useState(null);
+    const [daySummaryId, setDaySummaryId ] = useState(null);
 
     useEffect(() => {
         fetchTasksFromServer();
@@ -27,6 +28,22 @@ function Tasks() {
                 console.error('Error fetching tasks:', error);
                 throw error;
             });
+
+        fetch('http://localhost:5000/api/daysummary')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setDaySummaryId(data._id);
+            })
+            .catch(error => {
+                console.error('Error fetching 2:', error);
+                throw error;
+            });
+            
     }
     
     
@@ -41,7 +58,8 @@ function Tasks() {
                 date: task.date,
                 nonFormattedDate: task.nonFormattedDate,
                 status: task.status,
-                color: task.color
+                color: task.color,
+                summaryId: daySummaryId
             }),
         })
             .then(response => {
@@ -90,7 +108,7 @@ function Tasks() {
     
 
     function deleteTask(taskId) {
-        setTasks(prevTasks => prevTasks.filter(t => t._id !== taskId));
+        setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId));
         fetch('http://localhost:5000/api/tasks/del', {
             method: 'POST',
             headers: {
@@ -98,6 +116,7 @@ function Tasks() {
             },
             body: JSON.stringify({
                 id: taskId,
+                summaryId: daySummaryId
             }),
         })
         .then(response => {
@@ -114,6 +133,8 @@ function Tasks() {
     
     function getTaskItems() {
         if (tasks.length === 0) return null;
+        
+        console.log(tasks);
         return tasks.map((item, index) => (
             <TaskItem
                 key={item._id}

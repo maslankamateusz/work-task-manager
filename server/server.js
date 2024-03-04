@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const taskRoutes = require('./routes/taskRoutes');
 const checklistRoutes = require('./routes/checklistRoutes');
-
+const daySummary = require('./routes/daySummaryRoutes')
 
 app.use(cors());
 
@@ -30,6 +30,9 @@ app.post('/api/checklist', checklistRoutes);
 app.put('/api/checklist', checklistRoutes);
 app.post('/api/checklist', checklistRoutes);
 
+app.use('/api/daysummary', daySummary);
+app.post('/api/daysummary', daySummary);
+app.post('/api/daysummary', daySummary);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

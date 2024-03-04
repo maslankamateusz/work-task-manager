@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Checklist = require('../models/Checklist');
+const DaySummary = require('../models/DaySummary')
 
 router.get('/', async (req, res) => {
     try {
@@ -12,12 +13,20 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const checklist = new Checklist({
-        name: req.body.name,
-        isEditing: req.body.isEditing
-    });
     try {
+        const checklist = new Checklist({
+            name: req.body.name,
+            isEditing: req.body.isEditing
+        });
+        const daySummaryId = req.body.summaryId;
+        const daySummary = await DaySummary.findById(daySummaryId);
+        if (daySummary == null) {
+            return res.status(404).json({ message: 'Day summary not found' });
+        }
+        daySummary.checklistsAmount = (daySummary.checklistsAmount || 0) + 1;
+        
         const newChecklistk = await checklist.save();
+        await daySummary.save();
         res.status(201).json(newChecklistk);
     } catch (err) {
         res.status(400).json({ message: err.message });
