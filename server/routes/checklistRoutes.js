@@ -16,7 +16,8 @@ router.post('/', async (req, res) => {
     try {
         const checklist = new Checklist({
             name: req.body.name,
-            isEditing: req.body.isEditing
+            isEditing: req.body.isEditing,
+            isDone: req.body.isDone
         });
         const daySummaryId = req.body.summaryId;
         const daySummary = await DaySummary.findById(daySummaryId);
@@ -39,8 +40,10 @@ router.put('/:id', async (req, res) => {
         if (checklist == null) {
             return res.status(404).json({ message: 'Checklist item not found' });
         }
+        console.log(req.body);
         checklist.name = req.body.name;
         checklist.isEditing = req.body.isEditing;
+        checklist.isDone = req.body.isDone;
         const updatedChecklist = await checklist.save();
         res.json(updatedChecklist);
     } catch (err) {

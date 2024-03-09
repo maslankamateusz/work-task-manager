@@ -4,8 +4,7 @@ const cors = require('cors');
 const app = express();
 const taskRoutes = require('./routes/taskRoutes');
 const checklistRoutes = require('./routes/checklistRoutes');
-const daySummary = require('./routes/daySummaryRoutes')
-const daySummary = require('./routes/daySummaryRoutes')
+const daySummary = require('./routes/daySummaryRoutes');
 
 app.use(cors());
 
