@@ -3,9 +3,28 @@ const router = express.Router();
 const Checklist = require('../models/Checklist');
 const DaySummary = require('../models/DaySummary')
 
+function getTodayDate(){
+    const today = new Date();
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear();
+    const formattedDate = `${day}.${month}.${year}`;
+    return formattedDate;
+}
+
 router.get('/', async (req, res) => {
     try {
-        const checklist = await Checklist.find();
+        let checklist = await Checklist.find();
+
+        checklist = await Promise.all(checklist.map(async (item) => {
+            if (item.doneDate !== getTodayDate()) {
+                item.doneDate = null;
+                item.isDone = false;
+                await item.save(); 
+            }
+            return item;
+        }));
+
         res.json(checklist);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -17,7 +36,8 @@ router.post('/', async (req, res) => {
         const checklist = new Checklist({
             name: req.body.name,
             isEditing: req.body.isEditing,
-            isDone: req.body.isDone
+            isDone: req.body.isDone,
+            doneDate: req.body.doneDate
         });
         const daySummaryId = req.body.summaryId;
         const daySummary = await DaySummary.findById(daySummaryId);
@@ -40,10 +60,14 @@ router.put('/:id', async (req, res) => {
         if (checklist == null) {
             return res.status(404).json({ message: 'Checklist item not found' });
         }
-        console.log(req.body);
         checklist.name = req.body.name;
         checklist.isEditing = req.body.isEditing;
         checklist.isDone = req.body.isDone;
+        if(req.body.doneDate) {
+            checklist.doneDate = getTodayDate();
+        } else{
+            checklist.doneDate = null;
+        }
         const updatedChecklist = await checklist.save();
         res.json(updatedChecklist);
     } catch (err) {

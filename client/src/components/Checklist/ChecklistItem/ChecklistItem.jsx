@@ -4,14 +4,9 @@ function ChecklistItem({ item, changeEditItemStatus, editItem, completeCheckItem
             editItem(item._id, event.target.value);
         }
     };
-
-    //poniższą linijkę chciałbym wykonać tylko 1 podczas odświeżenia strony, w przypadku zmiany state i ponownego odrysowania
-    //let itemClassName = item.isDone ? "w-full font-medium ms-2 text-gray-400 peer-checked:text-gray-600 line-through peer-checked:no-underline cursor-text" : "w-full font-medium ms-2 text-gray-600 peer-checked:text-gray-400 peer-checked:line-through cursor-text";
-
     const handleCheckDone = (event) => {
         completeCheckItem(event.target.id);
     };
-    //console.log(itemClassName);
     if (!item.isEditing) {
         return (
             <li className={`flex w-full items-center justify-center gap-2.5 border-b-2 bg-white px-3 py-2.5 hover:border-gray-400 `}>

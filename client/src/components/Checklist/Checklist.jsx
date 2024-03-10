@@ -52,7 +52,8 @@ function Checklist() {
         name: "Add name",
         isEditing: false,
         summaryId: daySummaryId,
-        isDone: false
+        isDone: false,
+        doneDate: null
       }),
     })
       .then(response => {
@@ -68,7 +69,8 @@ function Checklist() {
             _id: result._id,
             name: "Add name",
             isEditing: false,
-            isDone: false
+            isDone: false,
+            doneDate: null
           }
         ]);
       })
@@ -88,7 +90,13 @@ function Checklist() {
     
     const updatedItems = [...checklistItems];
     const itemIndexToUpdate = updatedItems.findIndex(item => item._id === checkListItemId);
+
     if (itemIndexToUpdate !== -1) {
+        if(updatedItems[itemIndexToUpdate].isDone){
+          updatedItems[itemIndexToUpdate].doneDate = null;
+        } else{
+          updatedItems[itemIndexToUpdate].doneDate = true;
+        }
         updatedItems[itemIndexToUpdate].isDone = !updatedItems[itemIndexToUpdate].isDone;
     }
     const itemTuUpdate = updatedItems[itemIndexToUpdate];
@@ -101,8 +109,23 @@ function Checklist() {
       body: JSON.stringify(itemTuUpdate)
     }).catch(error => {
         console.error('Error editing checklist item:', error);
-      });
-      
+    });
+
+    const ifDone = updatedItems[itemIndexToUpdate].isDone;
+    try {
+      await fetch(`http://localhost:5000/api/daysummary/checklistdone`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },       
+        body: JSON.stringify({
+          summaryId: daySummaryId,
+          checkItemDone: ifDone
+      })
+      })
+    } catch (error) {
+        console.error('Error updating checklist item status:', error);
+    }
   }
  
   function deleteItem(checklistItemId) {
@@ -138,12 +161,7 @@ function Checklist() {
     let updatedItem;
     if (itemName) {
       updatedItem = { ...itemToUpdate, name: itemName, isEditing: false };
-    } else {
-      deleteItem(_id);
-      return;
-    }
-
-    fetch(`http://localhost:5000/api/checklist/${_id}`, {
+      fetch(`http://localhost:5000/api/checklist/${_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -167,6 +185,11 @@ function Checklist() {
       .catch(error => {
         console.error('Error editing checklist item:', error);
       });
+    } else {
+      deleteItem(_id);
+      return;
+    }
+    
   
   }
   return (
