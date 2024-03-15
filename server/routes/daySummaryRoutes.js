@@ -19,16 +19,16 @@ router.get('/', async (req, res) => {
         if (!entry) {
             entry = new DaySummary({ date: formattedDate });
             entry = await entry.save();
-        } else {
-            const checklistsCount = await Checklist.countDocuments({ daySummaryId: entry._id });
+         }// else {
+        //     const checklistsCount = await Checklist.countDocuments({ daySummaryId: entry._id });
 
-            if (checklistsCount > 30) {
-                const lastChecklist = await Checklist.findOne({ daySummaryId: entry._id }).sort({ _id: -1 });
-                if (lastChecklist) {
-                    await lastChecklist.remove();
-                }
-            }
-        }
+        //     if (checklistsCount > 30) {
+        //         const lastChecklist = await Checklist.findOne({ daySummaryId: entry._id }).sort({ _id: -1 });
+        //         if (lastChecklist) {
+        //             await lastChecklist.remove();
+        //         }
+        //     }
+        // }
         res.json(entry);
     } catch (err) {
         console.error(err);
