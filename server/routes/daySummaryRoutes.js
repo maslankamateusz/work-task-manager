@@ -19,16 +19,7 @@ router.get('/', async (req, res) => {
         if (!entry) {
             entry = new DaySummary({ date: formattedDate });
             entry = await entry.save();
-        } else {
-            const checklistsCount = await Checklist.countDocuments({ daySummaryId: entry._id });
-
-            if (checklistsCount > 30) {
-                const lastChecklist = await Checklist.findOne({ daySummaryId: entry._id }).sort({ _id: -1 });
-                if (lastChecklist) {
-                    await lastChecklist.remove();
-                }
-            }
-        }
+         }
         res.json(entry);
     } catch (err) {
         console.error(err);
@@ -78,5 +69,34 @@ router.post('/checklistdone', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+router.post('/dailymeasurements', async (req, res) => {
+    
+     try {
+        const daySummaryId = req.body.summaryId;
+        const bodyweight = req.body.bodyweight;
+        const sleepDuration = req.body.sleepDuration;
+
+        if (!daySummaryId) {
+            return res.status(400).json({ message: 'Invalid request. SummaryId is required.' });
+        }
+        const daySummary = await DaySummary.findById(daySummaryId);
+        if (!daySummary) {
+            return res.status(404).json({ message: 'Day summary not found' });
+        }
+        if (bodyweight) {
+             daySummary.bodyweight = bodyweight;
+        }
+        if (sleepDuration) {
+            daySummary.sleepDuration = sleepDuration;
+        }
+        const updatedSummary = await daySummary.save();
+        res.status(200).json(updatedSummary);
+    } catch (err) {
+         res.status(400).json({ message: err.message });
+     }
+});
+
+
 
 module.exports = router;

@@ -21,6 +21,12 @@ const daySchema = new mongoose.Schema({
     checklistsCompleted: {
         type: Number,
         default: 0
+    },
+    bodyweight: {
+        type: Number,
+    },
+    sleepDuration: {
+        type: String,
     }
 });
 
