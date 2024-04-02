@@ -97,6 +97,28 @@ router.post('/dailymeasurements', async (req, res) => {
      }
 });
 
+router.post('/additionalNotes', async (req, res) => {
+    try{
+        const additionalNotes = req.body.newNotes;
+        const daySummaryId = req.body.summaryId;
+
+        if (!daySummaryId) {
+            return res.status(400).json({ message: 'Invalid request. SummaryId is required.' });
+        }
+        const daySummary = await DaySummary.findById(daySummaryId);
+        if (!daySummary) {
+            return res.status(404).json({ message: 'Day summary not found' });
+        }
+        if (additionalNotes) {
+             daySummary.additionalNotes = additionalNotes;
+        }
+        const updatedSummary = await daySummary.save();
+        res.status(200).json(updatedSummary);
+
+    }catch(err){
+        res.status(400).json({message: err.message})
+    }
+})
 
 
 module.exports = router;

@@ -27,6 +27,9 @@ const daySchema = new mongoose.Schema({
     },
     sleepDuration: {
         type: String,
+    },
+    additionalNotes: {
+        type: Object,
     }
 });
 

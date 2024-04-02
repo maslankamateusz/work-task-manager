@@ -33,6 +33,7 @@ app.post('/api/checklist', checklistRoutes);
 app.use('/api/daysummary', daySummary);
 app.post('/api/daysummary', daySummary);
 app.post('/api/daysummary', daySummary);
+app.post('/api/daysummary', daySummary);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
