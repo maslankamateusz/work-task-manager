@@ -90,14 +90,15 @@ function Measurements() {
             <div className="w-1/2 h-full flex items-center justify-center">
                 <label className="mr-2 text-lg">Sleep: </label>
                 <select
-                    className="shadow appearance-none border rounded py-2 px-2 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
-                    onChange={handleSleepDurationChange}
+                className="shadow appearance-none border rounded py-2 px-2 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-2/5"
+                onChange={handleSleepDurationChange}
+                value={dailyMeasurements.sleepDuration}
                 >
-                    {dailyMeasurements.sleepDuration && <option className='bg-gray-200'>{dailyMeasurements.sleepDuration}</option>}
-                    {sleepDuration.map((e, index) => (
-                        dailyMeasurements.sleepDuration !== e && <option key={index}>{e}</option>
-                    ))}
-                </select>
+                {sleepDuration.map((e, index) => (
+                    <option key={index}>{e}</option>
+                ))}
+              </select>
+
             </div>
         </div>
     );
