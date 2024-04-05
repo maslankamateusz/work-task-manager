@@ -1,11 +1,34 @@
 import { useState, useEffect } from 'react';
 import AdditionalNotesInput from "./AdditionalNotesInput/AdditionalNotesInput";
 
+function getDefaultNotes() {
+    let defaultNotes;
+    const today = new Date();
+    const dayOfWeek = today.getDay(); 
+    if(dayOfWeek === 0 || dayOfWeek === 6){
+        defaultNotes = {
+            "214/01": "",
+            "107/01": "",
+            "107/02": "",
+            "254/01": "",
+        }
+    } else{
+        defaultNotes = {
+            "214/01": "",
+            "214/02": "",
+            "214/03": "",
+            "107/01": "",
+            "107/02": "",
+            "107/03": "",
+            "254/01": ""
+        }
+    }
+    return defaultNotes;
+}
 
 function AdditionalNotes(){
-    const [additionalNotes, setAdditionalNotes] = useState({});
+    const [additionalNotes, setAdditionalNotes] = useState(getDefaultNotes());
     const [daySummaryId, setDaySummaryId ] = useState(null);
-
 
     useEffect(() => {
         fetchAdditionalNotesFromServer();
@@ -21,7 +44,7 @@ function AdditionalNotes(){
             })
             .then(data => {
                 setDaySummaryId(data._id);
-                setAdditionalNotes(data.additionalNotes);
+                if(data.additionalNotes) setAdditionalNotes(data.additionalNotes);
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -57,7 +80,6 @@ function AdditionalNotes(){
                 console.error('Error  update notes:', error);
             });
     }
-
 
     return(
         <div className="w-full h-full bg-yellow-300 py-2 flex flex-col items-center justify-around">

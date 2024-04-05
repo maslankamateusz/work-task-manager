@@ -4,7 +4,7 @@ import AdditionalNotes from "./AdditionalNotes/AdditionalNotes";
 
 function Notes(){
 
-    const [additionalNotes, setAdditionalNotes] = useState(true);
+    const [additionalNotes, setAdditionalNotes] = useState(false);
 
     function handleClick(){
         setAdditionalNotes(prev => !prev)
@@ -16,8 +16,8 @@ function Notes(){
                 <div className={additionalNotes ? "bg-blue-300 w-4/5 ": "bg-blue-300 w-full "}>
                     notes
                 </div>
-                <div className={additionalNotes ? " w-1/6": ""}>
-                    <AdditionalNotes />
+                <div className={additionalNotes ? " w-1/6": "w-0"}>
+                    {additionalNotes ? <AdditionalNotes /> : null}
                 </div>
             </div>
             <div className=" w-full flex justify-end">
