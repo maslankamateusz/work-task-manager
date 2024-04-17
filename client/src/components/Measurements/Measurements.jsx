@@ -74,7 +74,7 @@ function Measurements() {
   }
 
     return (
-        <div className="bg-orange-200 w-full h-1/6 flex">
+        <div className="bg-rose-300 w-full h-1/6 flex">
             <div className="w-1/2 h-full flex items-center justify-center">
                 <label htmlFor="weight" className="mr-2 text-lg ">Weight: </label>
                 <input

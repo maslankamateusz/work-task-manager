@@ -12,8 +12,8 @@ function Notes(){
 
     return (
         <div className="w-3/5 me-3 flex flex-col justify-between " >
-            <div className="w-full h-3/4 flex justify-between">
-                <div className={additionalNotes ? "bg-blue-300 w-4/5 ": "bg-blue-300 w-full "}>
+            <div className="w-full h-4/5 flex justify-between">
+                <div className={additionalNotes ? "bg-amber-100 w-4/5 ": "bg-yellow-200 w-full "}>
                     notes
                 </div>
                 <div className={additionalNotes ? " w-1/6": "w-0"}>
