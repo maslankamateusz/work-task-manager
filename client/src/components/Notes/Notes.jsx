@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Measurements from "../Measurements/Measurements";
 import AdditionalNotes from "./AdditionalNotes/AdditionalNotes";
 
