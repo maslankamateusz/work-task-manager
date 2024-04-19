@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const Circle = styled.circle`
@@ -72,7 +72,7 @@ export default function Timer() {
   };
 
   return (
-    <div style={{ position: 'relative', width: '10vw', height: '15vh' }}>
+    <div className='relative w-[14vw] h-[15vh]'>
       <svg width="100%" height="100%" viewBox="0 0 100 100">
         <Circle
           cx="50"
@@ -84,20 +84,14 @@ export default function Timer() {
         <CircleBorder cx="50" cy="50" r="48" />
       </svg>
       <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          fontSize: '24px',
-        }}
+        className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl'
       >
         {formatTime(elapsedTime)}
       </div>
-      <div style={{ marginTop: '20px' }}>
-        <button onClick={startTimer}>Start</button>
-        <button onClick={pauseTimer}>Pause</button>
-        <button onClick={resetTimer}>Reset</button>
+      <div className="mt-2 flex justify-center">
+        <button className="px-3 py-1 mr-2 bg-blue-500 text-white rounded" onClick={startTimer}>Start</button>
+        <button className="px-3 py-1 mr-2 bg-blue-500 text-white rounded" onClick={pauseTimer}>Pause</button>
+        <button className="px-3 py-1 bg-blue-500 text-white rounded" onClick={resetTimer}>Reset</button>
       </div>
     </div>
   );
