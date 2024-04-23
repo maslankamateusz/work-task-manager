@@ -25,18 +25,22 @@ export default function Timer() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [dashOffset, setDashOffset] = useState(283);
-  const intervalRef = useRef(null);
   const lastDashOffset = useRef(null);
+  const startTime = useRef(null);
+  const animationFrame = useRef(null);
 
   const fullRotationTime = 3600;
 
   const startTimer = () => {
     setIsRunning(true);
+    startTime.current = Date.now() - (elapsedTime * 1000);
+    animationFrame.current = requestAnimationFrame(updateTime);
   };
 
   const pauseTimer = () => {
     setIsRunning(false);
     lastDashOffset.current = dashOffset;
+    cancelAnimationFrame(animationFrame.current);
   };
 
   const resetTimer = () => {
@@ -45,26 +49,16 @@ export default function Timer() {
     lastDashOffset.current = 283;
   };
 
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else {
-      clearInterval(intervalRef.current);
-    }
+  const updateTime = () => {
+    const currentTime = Date.now();
+    const newElapsedTime = Math.floor((currentTime - startTime.current) / 1000);
+    setElapsedTime(newElapsedTime);
 
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-  }, [isRunning]);
+    const newDashOffset = ((newElapsedTime % fullRotationTime) / fullRotationTime) * 283;
+    setDashOffset((283 - newDashOffset).toFixed(2));
 
-  useEffect(() => {
-    if (isRunning) {
-      const newDashOffset = ((elapsedTime % fullRotationTime) / fullRotationTime) * 283;
-      setDashOffset((283 - newDashOffset).toFixed(2));
-    }
-  }, [elapsedTime, isRunning]);
+    animationFrame.current = requestAnimationFrame(updateTime);
+  };
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -73,7 +67,7 @@ export default function Timer() {
   };
 
   return (
-    <div className='relative w-[14vw] h-[15vh]'>
+    <div className='mt-1 relative w-[14vw] h-[15vh]'>
       <svg width="100%" height="100%" viewBox="0 0 100 100">
         <Circle
           cx="50"
