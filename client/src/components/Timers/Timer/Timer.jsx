@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import TimerIcon from './TimerIcon/TimerIcon.jsx';
 
 const Circle = styled.circle`
   stroke-dasharray: 283;
@@ -83,15 +84,15 @@ export default function Timer() {
         <CircleBorder cx="50" cy="50" r="42" />
         <CircleBorder cx="50" cy="50" r="48" />
       </svg>
+    
       <div
-        className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl'
+        className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl w-full h-full flex items-center justify-center'
       >
-        {formatTime(elapsedTime)}
+        <TimerIcon startTimer={startTimer} pauseTimer={pauseTimer} />
       </div>
+    
       <div className="mt-2 flex justify-center">
-        <button className="px-3 py-1 mr-2 bg-blue-500 text-white rounded" onClick={startTimer}>Start</button>
-        <button className="px-3 py-1 mr-2 bg-blue-500 text-white rounded" onClick={pauseTimer}>Pause</button>
-        <button className="px-3 py-1 bg-blue-500 text-white rounded" onClick={resetTimer}>Reset</button>
+        {formatTime(elapsedTime)}
       </div>
     </div>
   );
