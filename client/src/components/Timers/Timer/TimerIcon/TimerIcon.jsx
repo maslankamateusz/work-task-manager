@@ -17,17 +17,19 @@ const IconWrapper = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(${({ isTimerRunning }) => (isTimerRunning ? '0' : '1')});
-    opacity: ${({ isTimerRunning }) => (isTimerRunning ? '0' : '1')};
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease-in-out;
   }
-  .play-icon{
-    margin-left: 5px;
+
+  .play-icon {
+    margin-left: 3px;
+    opacity: ${({ isTimerRunning }) => (isTimerRunning ? '0' : '1')};
+    transform: translate(-50%, -50%) scale(${({ isTimerRunning }) => (isTimerRunning ? '0' : '1')});
   }
 
   .pause-icon {
-    transform: translate(-50%, -50%) scale(${({ isTimerRunning }) => (isTimerRunning ? '1' : '0')});
     opacity: ${({ isTimerRunning }) => (isTimerRunning ? '1' : '0')};
+    transform: translate(-50%, -50%) scale(${({ isTimerRunning }) => (isTimerRunning ? '1' : '0')});
   }
 `;
 

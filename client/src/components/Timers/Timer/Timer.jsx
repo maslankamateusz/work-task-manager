@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
+import TimerDescription from './TimerDescription/TimerDescription.jsx';
 
 const Circle = styled.circle`
   stroke-dasharray: 283;
@@ -21,7 +22,7 @@ const CircleBorder = styled.circle`
   fill: none;
 `;
 
-export default function Timer() {
+export default function Timer({title}) {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [dashOffset, setDashOffset] = useState(283);
@@ -54,8 +55,8 @@ export default function Timer() {
     const newElapsedTime = Math.floor((currentTime - startTime.current) / 1000);
     setElapsedTime(newElapsedTime);
 
-    const newDashOffset = ((newElapsedTime % fullRotationTime) / fullRotationTime) * 283;
-    setDashOffset((283 - newDashOffset).toFixed(2));
+    const newDashOffset = 283 - ((newElapsedTime % fullRotationTime) / fullRotationTime) * 283;
+    setDashOffset(newDashOffset.toFixed(2));
 
     animationFrame.current = requestAnimationFrame(updateTime);
   };
@@ -67,27 +68,31 @@ export default function Timer() {
   };
 
   return (
-    <div className='mt-1 relative w-[14vw] h-[15vh]'>
-      <svg width="100%" height="100%" viewBox="0 0 100 100">
-        <Circle
-          cx="50"
-          cy="50"
-          r="45"
-          dashOffset={isRunning ? dashOffset : (lastDashOffset.current || 283)}
-        />
-        <CircleBorder cx="50" cy="50" r="42" />
-        <CircleBorder cx="50" cy="50" r="48" />
-      </svg>
-    
-      <div
-        className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl w-full h-full flex items-center justify-center'
-      >
-        <TimerIcon startTimer={startTimer} pauseTimer={pauseTimer} />
+    <div className='p-1 relative w-full h-full flex justify-around'>
+      <div className='w-1/3'>
+          <TimerDescription title={title}/>
       </div>
-    
-      <div className="mt-2 flex justify-center">
-        {formatTime(elapsedTime)}
+      <div className='w-2/3 flex flex-col items-center justify-center'>
+        <div className='w-[70%] h-[70%] relative'>
+          <svg width="100%" height="100%" viewBox="0 0 100 100" className='mb-2'>
+            <Circle
+              cx="50"
+              cy="50"
+              r="45"
+              dashOffset={isRunning ? dashOffset : (lastDashOffset.current || 283)}
+            />
+            <CircleBorder cx="50" cy="50" r="42" />
+            <CircleBorder cx="50" cy="50" r="48" />
+          </svg>
+          <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center'>
+            <TimerIcon startTimer={startTimer} pauseTimer={pauseTimer} />
+          </div>
+        </div>
+        <div className="flex justify-center mt-2">
+          {formatTime(elapsedTime)}
+        </div>
       </div>
     </div>
+      
   );
 }
