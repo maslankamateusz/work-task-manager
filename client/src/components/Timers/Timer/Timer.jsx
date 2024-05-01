@@ -22,41 +22,58 @@ const CircleBorder = styled.circle`
   fill: none;
 `;
 
-export default function Timer({title}) {
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [dashOffset, setDashOffset] = useState(283);
+export default function Timer({ title }) {
+  const [timerState, setTimerState] = useState({
+    elapsedTime: 0,
+    isRunning: false,
+    dashOffset: 283,
+    fullRotationTime: 3600 
+  });
   const lastDashOffset = useRef(null);
   const startTime = useRef(null);
   const animationFrame = useRef(null);
 
-  const fullRotationTime = 3600;
-
   const startTimer = () => {
-    setIsRunning(true);
-    startTime.current = Date.now() - (elapsedTime * 1000);
+    setTimerState(prevState => ({
+      ...prevState,
+      isRunning: true
+    }));
+    startTime.current = Date.now() - (timerState.elapsedTime * 1000);
     animationFrame.current = requestAnimationFrame(updateTime);
   };
 
   const pauseTimer = () => {
-    setIsRunning(false);
-    lastDashOffset.current = dashOffset;
+    setTimerState(prevState => ({
+      ...prevState,
+      isRunning: false
+    }));
+    lastDashOffset.current = timerState.dashOffset;
     cancelAnimationFrame(animationFrame.current);
   };
 
   const resetTimer = () => {
-    setElapsedTime(0);
-    setDashOffset(283);
+    setTimerState({
+      elapsedTime: 0,
+      isRunning: false,
+      dashOffset: 283,
+      fullRotationTime: timerState.fullRotationTime
+    });
     lastDashOffset.current = 283;
   };
 
   const updateTime = () => {
     const currentTime = Date.now();
     const newElapsedTime = Math.floor((currentTime - startTime.current) / 1000);
-    setElapsedTime(newElapsedTime);
+    setTimerState(prevState => ({
+      ...prevState,
+      elapsedTime: newElapsedTime
+    }));
 
-    const newDashOffset = 283 - ((newElapsedTime % fullRotationTime) / fullRotationTime) * 283;
-    setDashOffset(newDashOffset.toFixed(2));
+    const newDashOffset = 283 - ((newElapsedTime % timerState.fullRotationTime) / timerState.fullRotationTime) * 283; 
+    setTimerState(prevState => ({
+      ...prevState,
+      dashOffset: newDashOffset.toFixed(2)
+    }));
 
     animationFrame.current = requestAnimationFrame(updateTime);
   };
@@ -67,10 +84,25 @@ export default function Timer({title}) {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
+  const handleAddTime = (time) => {
+    const newElapsedTime = timerState.elapsedTime + (time * 60);
+    setTimerState(prevState => ({
+      ...prevState,
+      elapsedTime: newElapsedTime
+    }));
+  
+    const newDashOffset = 283 - ((newElapsedTime % timerState.fullRotationTime) / timerState.fullRotationTime) * 283;
+    setTimerState(prevState => ({
+      ...prevState,
+      dashOffset: newDashOffset.toFixed(2)
+    }));
+    lastDashOffset.current = newDashOffset;
+  };
+
   return (
     <div className='p-1 relative w-full h-full flex justify-around'>
       <div className='w-1/3'>
-          <TimerDescription title={title}/>
+          <TimerDescription title={title} addTime={handleAddTime}/>
       </div>
       <div className='w-2/3 flex flex-col items-center justify-center'>
         <div className='w-[70%] h-[70%] relative'>
@@ -79,7 +111,7 @@ export default function Timer({title}) {
               cx="50"
               cy="50"
               r="45"
-              dashOffset={isRunning ? dashOffset : (lastDashOffset.current || 283)}
+              dashOffset={timerState.isRunning ? timerState.dashOffset : (lastDashOffset.current || 283)}
             />
             <CircleBorder cx="50" cy="50" r="42" />
             <CircleBorder cx="50" cy="50" r="48" />
@@ -89,10 +121,9 @@ export default function Timer({title}) {
           </div>
         </div>
         <div className="flex justify-center mt-2">
-          {formatTime(elapsedTime)}
+          {formatTime(timerState.elapsedTime)}
         </div>
       </div>
     </div>
-      
   );
 }
