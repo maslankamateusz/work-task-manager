@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
 import TimerDescription from './TimerDescription/TimerDescription.jsx';
@@ -64,19 +64,17 @@ export default function Timer({ title }) {
   const updateTime = () => {
     const currentTime = Date.now();
     const newElapsedTime = Math.floor((currentTime - startTime.current) / 1000);
+    const newDashOffset = 283 - ((newElapsedTime % timerState.fullRotationTime) / timerState.fullRotationTime) * 283;
+  
     setTimerState(prevState => ({
       ...prevState,
-      elapsedTime: newElapsedTime
-    }));
-
-    const newDashOffset = 283 - ((newElapsedTime % timerState.fullRotationTime) / timerState.fullRotationTime) * 283; 
-    setTimerState(prevState => ({
-      ...prevState,
+      elapsedTime: newElapsedTime,
       dashOffset: newDashOffset.toFixed(2)
     }));
-
+  
     animationFrame.current = requestAnimationFrame(updateTime);
   };
+  
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -85,19 +83,26 @@ export default function Timer({ title }) {
   };
 
   const handleAddTime = (time) => {
+    if (timerState.elapsedTime + (time * 60) < 0) {
+      return;
+    }
+    if (timerState.isRunning) {
+      const newStartTime = Date.now() - ((timerState.elapsedTime + (time * 60)) * 1000);
+      startTime.current = newStartTime;
+    }
     const newElapsedTime = timerState.elapsedTime + (time * 60);
-    setTimerState(prevState => ({
-      ...prevState,
-      elapsedTime: newElapsedTime
-    }));
-  
     const newDashOffset = 283 - ((newElapsedTime % timerState.fullRotationTime) / timerState.fullRotationTime) * 283;
+
     setTimerState(prevState => ({
       ...prevState,
+      elapsedTime: newElapsedTime,
       dashOffset: newDashOffset.toFixed(2)
     }));
     lastDashOffset.current = newDashOffset;
   };
+  
+  
+  
 
   return (
     <div className='p-1 relative w-full h-full flex justify-around'>

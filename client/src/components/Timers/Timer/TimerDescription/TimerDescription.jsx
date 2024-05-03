@@ -4,11 +4,11 @@ export default function TimerDescription({ title, addTime }) {
     const [addTimeToggle, setAddTimeToggle] = useState(false);
     const addedTime = useRef();
 
-    function onButtonClick() {
+    const onButtonClick = () => {
         setAddTimeToggle((prev) => !prev);
     }
 
-    function onAddTime(){
+    const onAddTime = () => {
         addTime(addedTime.current.value);
     }
 
