@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
 import TimerDescription from './TimerDescription/TimerDescription.jsx';
@@ -22,12 +22,12 @@ const CircleBorder = styled.circle`
   fill: none;
 `;
 
-export default function Timer({ title }) {
+export default function Timer({ timerKey, title, fullRotationTime, onSaveDate }) {
   const [timerState, setTimerState] = useState({
     elapsedTime: 0,
     isRunning: false,
     dashOffset: 283,
-    fullRotationTime: 3600 
+    fullRotationTime: fullRotationTime
   });
   const lastDashOffset = useRef(null);
   const startTime = useRef(null);
@@ -49,6 +49,7 @@ export default function Timer({ title }) {
     }));
     lastDashOffset.current = timerState.dashOffset;
     cancelAnimationFrame(animationFrame.current);
+    onSaveDate(timerState.elapsedTime, timerKey);
   };
 
   const resetTimer = () => {

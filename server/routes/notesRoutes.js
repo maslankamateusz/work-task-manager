@@ -6,7 +6,6 @@ const Notes = require('../models/Notes');
 router.get('/', async (req, res) => {
     try {
         const notes = await Notes.find();
-        console.log(notes);
         res.json(notes);
     } catch (err) {
         res.status(500).json({ message: err.message });

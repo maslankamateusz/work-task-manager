@@ -27,7 +27,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 router.post('/checklistsummary', async (req, res) => {
     try {
         const daySummary = await DaySummary.findById(req.body.summaryId);
@@ -118,7 +117,49 @@ router.post('/additionalNotes', async (req, res) => {
     }catch(err){
         res.status(400).json({message: err.message})
     }
-})
+});
+
+router.post('/timers', async (req, res) => {
+    try {
+        const formattedDate = getTodayDate();
+        const daySummary = await DaySummary.findOne({ date: formattedDate });
+
+        if (!daySummary) {
+            return res.status(404).json({ message: 'Day summary not found for the current date' });
+        }
+
+        if (!req.body.timerKey || !req.body.elapsedTime || !req.body.rotationTime) {
+            return res.status(400).json({ message: 'timerKey, elapsedTime, and rotationTime are required' });
+        }
+
+        const timerKey = req.body.timerKey;
+        const elapsedTime = req.body.elapsedTime;
+        const rotationTime = req.body.rotationTime;
+
+        if (typeof timerKey !== 'number' || timerKey < 0 || timerKey >= daySummary.timers.length) {
+            return res.status(400).json({ message: 'Invalid timerKey' });
+        }
+
+        await DaySummary.updateOne(
+            { _id: daySummary._id }, 
+            { 
+                $set: { 
+                    [`timers.${timerKey}.durationTime`]: elapsedTime,
+                    [`timers.${timerKey}.rotationTime`]: rotationTime
+                } 
+            } 
+        );
+
+        res.status(200).json({ message: 'Timer updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+
+
 
 
 module.exports = router;

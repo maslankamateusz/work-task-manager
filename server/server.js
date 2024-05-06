@@ -6,6 +6,7 @@ const taskRoutes = require('./routes/taskRoutes');
 const checklistRoutes = require('./routes/checklistRoutes');
 const daySummary = require('./routes/daySummaryRoutes');
 const notes = require('./routes/notesRoutes');
+const timers = require('./routes/timersRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/checklist', checklistRoutes);
 app.use('/api/daysummary', daySummary);
 app.use('/api/notes', notes);
+app.use('/api/timers', timers);
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');

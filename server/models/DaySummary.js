@@ -30,6 +30,26 @@ const daySchema = new mongoose.Schema({
     },
     additionalNotes: {
         type: Object,
+    },
+    timers: {
+        type: Array,
+        default: [
+            {
+                name: "Work",
+                rotationTime: 3600,
+                durationTime: 0
+            },
+            {
+                name: "School",
+                rotationTime: 3600,
+                durationTime: 0
+            },
+            {
+                name: "Learn",
+                rotationTime: 3600,
+                durationTime: 0
+            }
+        ]
     }
 });
 
