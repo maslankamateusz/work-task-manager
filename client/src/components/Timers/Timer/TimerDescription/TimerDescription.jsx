@@ -6,11 +6,19 @@ export default function TimerDescription({ title, addTime }) {
 
     const onButtonClick = () => {
         setAddTimeToggle((prev) => !prev);
-    }
+    };
 
     const onAddTime = () => {
         addTime(addedTime.current.value);
-    }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            onAddTime();
+            addedTime.current.value = "";
+            setAddTimeToggle((prev) => !prev);
+        }
+    };
 
     return (
         <div className="h-full text-center">
@@ -30,6 +38,7 @@ export default function TimerDescription({ title, addTime }) {
                         style={{ width: "85%" }} 
                         className="rounded px-2 py-1"
                         ref={addedTime}
+                        onKeyDown={handleKeyDown}
                     />
                     <button 
                         className="bg-indigo-500 hover:bg-indigo-600 text-sm text-white px-2 p-2 rounded-xl shadow-md transition-colors duration-300 ease-in-out mt-2" 

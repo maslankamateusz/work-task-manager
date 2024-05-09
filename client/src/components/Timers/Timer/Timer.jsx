@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
 import TimerDescription from './TimerDescription/TimerDescription.jsx';
 
-const Circle = styled.circle`
+const Circle = styled(({ dashOffset, ...rest }) => <circle {...rest} />)`
   stroke-dasharray: 283;
   stroke-dashoffset: ${({ dashOffset }) => dashOffset};
   transition: stroke-dashoffset 1s linear;
@@ -13,7 +13,7 @@ const Circle = styled.circle`
   stroke-linecap: round;
 `;
 
-const CircleBorder = styled.circle`
+const CircleBorder = styled(({ dashOffset, ...rest }) => <circle {...rest} />)`
   stroke-dasharray: 330;
   stroke-dashoffset: ${({ dashOffset }) => dashOffset};
   transition: stroke-dashoffset 1s linear;
@@ -22,14 +22,16 @@ const CircleBorder = styled.circle`
   fill: none;
 `;
 
-export default function Timer({ timerKey, title, fullRotationTime, onSaveDate }) {
+
+
+export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, onSaveDate }) {
   const [timerState, setTimerState] = useState({
-    elapsedTime: 0,
+    elapsedTime: elapsedTime,
     isRunning: false,
-    dashOffset: 283,
+    dashOffset: (elapsedTime !== 0 ? 283 - ((elapsedTime % fullRotationTime) / fullRotationTime) * 283 : 283),
     fullRotationTime: fullRotationTime
   });
-  const lastDashOffset = useRef(null);
+  const lastDashOffset = useRef(timerState.dashOffset);
   const startTime = useRef(null);
   const animationFrame = useRef(null);
 
@@ -100,9 +102,9 @@ export default function Timer({ timerKey, title, fullRotationTime, onSaveDate })
       dashOffset: newDashOffset.toFixed(2)
     }));
     lastDashOffset.current = newDashOffset;
+    onSaveDate(newElapsedTime, timerKey);
+
   };
-  
-  
   
 
   return (

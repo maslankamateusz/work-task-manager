@@ -27,6 +27,22 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/timersdata', async (req, res) => {
+    const formattedDate = getTodayDate();
+
+    try {
+        let entry = await DaySummary.findOne({ date: formattedDate });
+        if (!entry) {
+            entry = new DaySummary({ date: formattedDate });
+            entry = await entry.save();
+         }
+        res.json(entry.timers);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Wystąpił błąd serwera' });
+    }
+});
+
 router.post('/checklistsummary', async (req, res) => {
     try {
         const daySummary = await DaySummary.findById(req.body.summaryId);
@@ -128,9 +144,10 @@ router.post('/timers', async (req, res) => {
             return res.status(404).json({ message: 'Day summary not found for the current date' });
         }
 
-        if (!req.body.timerKey || !req.body.elapsedTime || !req.body.rotationTime) {
+        if (req.body.timerKey === undefined || req.body.elapsedTime === undefined || req.body.rotationTime === undefined) {
             return res.status(400).json({ message: 'timerKey, elapsedTime, and rotationTime are required' });
         }
+        
 
         const timerKey = req.body.timerKey;
         const elapsedTime = req.body.elapsedTime;

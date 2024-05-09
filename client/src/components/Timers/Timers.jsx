@@ -15,18 +15,36 @@ function Timers(){
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/timers', {
+            const response1 = await fetch('http://localhost:5000/api/timers', {
                 method: 'GET',
             });
-            
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Failed to fetch notes');
+            const timerTitles = await response1.json();
+            if (!response1.ok) {
+                throw new Error(timerTitles.message || 'Failed to fetch timer titles');
             }
-            setTimerConfiguration(data.timers);
+        
+            const response2 = await fetch('http://localhost:5000/api/daysummary/timersdata', {
+                method: 'GET',
+            });
+            const timerDurations = await response2.json();
+            if (!response2.ok) {
+                throw new Error(timerDurations.message || 'Failed to fetch timer durations');
+            }
+            if(timerTitles && timerDurations) {
+                const newTimerConfiguration = timerTitles.timers.map((title, index) => {
+                    return {
+                        timerName: timerTitles.timers[index].timerName,
+                        rotationTime: timerTitles.timers[index].rotationTime,
+                        elapsedTime: timerDurations[index].durationTime
+                    };
+                });
+                setTimerConfiguration(newTimerConfiguration);
+            }
         } catch (error) {
             console.error('Fetch error:', error.message);
         }
+
+
     }
 
     const saveDate = async (elapsedTime, key) => {
@@ -58,7 +76,7 @@ function Timers(){
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
                 {timerConfiguration.map((timer, index) => (
-                    <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} onSaveDate={(timerState) => saveDate(timerState, index)} />
+                    <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} elapsedTime={timer.elapsedTime} onSaveDate={(timerState) => saveDate(timerState, index)} />
                 ))}
                 </div>
             </div>
