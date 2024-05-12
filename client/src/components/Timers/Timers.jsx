@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Timer from "./Timer/Timer";
 import TimerConfiBtn from "./Timer/TimerConfig/TimerConfigBtn";
+import TimerModal from "./Timer/TimerModal/TimerModal";
 
 function Timers(){
 
     const [ timerConfiguration, setTimerConfiguration ] = useState([]);
-    
+    const timerModal = useRef();
     useEffect(() => {
         fetchData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000); 
@@ -70,9 +71,13 @@ function Timers(){
             console.error('Error updating timers:', error.message);
         }
     }
+    const timerModalToggle = () => {
+        timerModal.current.showModal();
+    }
     
     return (
         <>
+            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
                 {timerConfiguration.map((timer, index) => (
@@ -81,7 +86,7 @@ function Timers(){
                 </div>
             </div>
             <div className="absolute text-right w-[43%] p-1 pe-2 align-top mb-10">
-                <TimerConfiBtn />
+                <TimerConfiBtn handleClick={timerModalToggle}/>
             </div>
         </>
         )
