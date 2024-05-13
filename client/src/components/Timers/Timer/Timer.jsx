@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
 import TimerDescription from './TimerDescription/TimerDescription.jsx';
 
-const Circle = styled(({ dashOffset, ...rest }) => <circle {...rest} />)`
+const Circle = styled(({ dashOffset, timerColor, ...rest }) => <circle {...rest} />)`
   stroke-dasharray: 283;
   stroke-dashoffset: ${({ dashOffset }) => dashOffset};
   transition: stroke-dashoffset 1s linear;
-  stroke: #007bff;
+  stroke: ${({ timerColor }) => `#${timerColor}`};
   stroke-width: 5;
   fill: none;
   stroke-linecap: round;
@@ -24,7 +24,7 @@ const CircleBorder = styled(({ dashOffset, ...rest }) => <circle {...rest} />)`
 
 
 
-export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, onSaveDate }) {
+export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, timerColor, onSaveDate }) {
   const [timerState, setTimerState] = useState({
     elapsedTime: elapsedTime,
     isRunning: false,
@@ -120,6 +120,7 @@ export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, 
               cy="50"
               r="45"
               dashOffset={timerState.isRunning ? timerState.dashOffset : (lastDashOffset.current || 283)}
+              timerColor={timerColor}
             />
             <CircleBorder cx="50" cy="50" r="42" />
             <CircleBorder cx="50" cy="50" r="48" />

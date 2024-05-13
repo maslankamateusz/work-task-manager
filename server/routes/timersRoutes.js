@@ -11,14 +11,17 @@ router.get('/', async (req, res) => {
                 {
                     timerName: "Work",
                     rotationTime: 3600,
+                    timerColor: "007bff"
                 },
                 {
                     timerName: "School",
                     rotationTime: 3600,
+                    timerColor: "007bff"
                 },
                 {
                     timerName: "Learn",
                     rotationTime: 3600,
+                    timerColor: "007bff"
                 }
             ]);
             entry = await entry.save();

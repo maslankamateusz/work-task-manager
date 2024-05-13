@@ -36,7 +36,8 @@ function Timers(){
                     return {
                         timerName: timerTitles.timers[index].timerName,
                         rotationTime: timerTitles.timers[index].rotationTime,
-                        elapsedTime: timerDurations[index].durationTime
+                        elapsedTime: timerDurations[index].durationTime,
+                        timerColor: timerTitles.timers[index].timerColor
                     };
                 });
                 setTimerConfiguration(newTimerConfiguration);
@@ -81,7 +82,7 @@ function Timers(){
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
                 {timerConfiguration.map((timer, index) => (
-                    <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} elapsedTime={timer.elapsedTime} onSaveDate={(timerState) => saveDate(timerState, index)} />
+                    <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} elapsedTime={timer.elapsedTime} timerColor={timer.timerColor} onSaveDate={(timerState) => saveDate(timerState, index)} />
                 ))}
                 </div>
             </div>
