@@ -25,15 +25,21 @@ const CircleBorder = styled(({ dashOffset, ...rest }) => <circle {...rest} />)`
 
 
 export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, timerColor, onSaveDate }) {
-  const [timerState, setTimerState] = useState({
-    elapsedTime: elapsedTime,
-    isRunning: false,
-    dashOffset: (elapsedTime !== 0 ? 283 - ((elapsedTime % fullRotationTime) / fullRotationTime) * 283 : 283),
-    fullRotationTime: fullRotationTime
-  });
+  const [timerState, setTimerState] = useState({});
   const lastDashOffset = useRef(timerState.dashOffset);
   const startTime = useRef(null);
   const animationFrame = useRef(null);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    setTimerState(prevState => ({
+      ...prevState,
+      elapsedTime: elapsedTime,
+      dashOffset: (elapsedTime !== 0 ? 283 - ((elapsedTime % fullRotationTime) / fullRotationTime) * 283 : 283),
+      fullRotationTime: fullRotationTime
+    }));
+  }, [elapsedTime, fullRotationTime]);
+
 
   const startTimer = () => {
     setTimerState(prevState => ({
@@ -42,7 +48,16 @@ export default function Timer({ timerKey, title, fullRotationTime, elapsedTime, 
     }));
     startTime.current = Date.now() - (timerState.elapsedTime * 1000);
     animationFrame.current = requestAnimationFrame(updateTime);
+    timerInterval();
   };
+
+  const timerInterval = () => {
+    intervalRef.current = setInterval(() => {
+      const currentTime = Date.now();
+      const newElapsedTime = Math.floor((currentTime - startTime.current) / 1000);
+      onSaveDate(newElapsedTime, timerKey);
+    }, 5 * 1000);
+  }
 
   const pauseTimer = () => {
     setTimerState(prevState => ({

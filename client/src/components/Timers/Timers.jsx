@@ -9,11 +9,8 @@ function Timers(){
     const timerModal = useRef();
     useEffect(() => {
         fetchData();
-        const intervalId = setInterval(fetchData, 5 * 60 * 1000); 
-        return () => clearInterval(intervalId);
     }, []);
     
-
     const fetchData = async () => {
         try {
             const response1 = await fetch('http://localhost:5000/api/timers', {
@@ -45,8 +42,6 @@ function Timers(){
         } catch (error) {
             console.error('Fetch error:', error.message);
         }
-
-
     }
 
     const saveDate = async (elapsedTime, key) => {
@@ -75,12 +70,41 @@ function Timers(){
     const timerModalToggle = () => {
         timerModal.current.showModal();
     }
+    const resetTimer = async (index) => {
+        try {
+            console.log(timerConfiguration[index].rotationTime);
+            const response = await fetch('http://localhost:5000/api/daysummary/timers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    elapsedTime: 0,
+                    rotationTime: timerConfiguration[index].rotationTime,
+                    timerKey: index
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update timers');
+            }
+        } catch (error) {
+            console.error('Error updating timers:', error.message);
+        }
+        const updatedTimerConfiguration = [...timerConfiguration];
+        updatedTimerConfiguration[index] = {
+            ...updatedTimerConfiguration[index],
+            elapsedTime: 0
+        };
+        setTimerConfiguration(updatedTimerConfiguration);
+      };
     
     return (
         <>
-            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration}/>
+            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
+                {console.log("sprawd", timerConfiguration)}
                 {timerConfiguration.map((timer, index) => (
                     <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} elapsedTime={timer.elapsedTime} timerColor={timer.timerColor} onSaveDate={(timerState) => saveDate(timerState, index)} />
                 ))}

@@ -1,7 +1,7 @@
 import { forwardRef } from "react"
 import TimerModalColumn from "./TimerModalColumn/TimerModalColumn"
 
-export default forwardRef(function TimerModal({timerConfiguration}, ref){
+export default forwardRef(function TimerModal({timerConfiguration, onResetTimer}, ref){
 
     const handleClose = () => {
         ref.current.close();
@@ -10,9 +10,9 @@ export default forwardRef(function TimerModal({timerConfiguration}, ref){
     return(
         <dialog ref={ref} className="w-1/2 h-[45%] bg-slate-200 rounded-lg shadow-lg backdrop:bg-stone-900/80  ">
             <div className="text-center w-[90%] h-full flex float-left">
-                {timerConfiguration.map((timerConfiguration) => {
-                    return <TimerModalColumn timerConfiguration={timerConfiguration}/>
-                })}
+            {timerConfiguration.map((timerConfiguration, index) => {
+                return <TimerModalColumn key={index} timerConfiguration={timerConfiguration} onResetTimer={onResetTimer} index={index} />
+            })}
             </div>
             <div className="text-center w-[10%] h-full flex-row justify-center items-center bg-slate-300 float-left	">
                 <div className="h-16 bg-slate-200 flex justify-center items-center">

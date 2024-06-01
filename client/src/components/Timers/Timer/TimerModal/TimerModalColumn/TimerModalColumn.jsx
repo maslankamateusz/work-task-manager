@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function TimerModalColumn({timerConfiguration}){
+export default function TimerModalColumn({timerConfiguration, onResetTimer, index  }){
+
+    const handleResetTimer = () => {
+        onResetTimer(index);
+    };
+
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
@@ -19,7 +24,7 @@ export default function TimerModalColumn({timerConfiguration}){
                 <div className='h-[5%] pt-2'>
                     <div className="flex items-center justify-center">
                         <h5 className='pt-1'>{formatTime(timerConfiguration.elapsedTime)}</h5>
-                        <FontAwesomeIcon className='ps-3 pb-[2px] text-xl' icon={faArrowRotateRight}/>
+                        <FontAwesomeIcon className='ps-3 pb-[2px] text-xl' icon={faArrowRotateRight} onClick={handleResetTimer} />
                     </div>
                 </div>
                 <div className='h-1/4 pt-4 mt-1'>
