@@ -1,10 +1,13 @@
-
+import { useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function TimerModalColumn({timerConfiguration, onResetTimer, index  }){
-
+export default function TimerModalColumn({timerConfiguration, onResetTimer,onChangeRotateTime, onChangeColor, onAddRangeOfTime, index  }){
+    const rotationTimeRef = useRef(null);
+    const colorRef = useRef(null);
+    const addTimeFromRef = useRef(null);
+    const addTimeToRef = useRef(null);
     const handleResetTimer = () => {
         onResetTimer(index);
     };
@@ -15,8 +18,34 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer, inde
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     };
 
+    const handleChangeRotateTime = () => {
+        onChangeRotateTime(index, rotationTimeRef.current.value);
+    }
+    const handleChangeColor = () => {
+        onChangeColor(index, colorRef.current.value);
+    }
+
+    const handleAddRangeOfTime = () => {
+        if(addTimeFromRef.current.value && addTimeToRef.current.value){
+
+            const [fromHours, fromMinutes] = addTimeFromRef.current.value.split(':').map(Number);
+            const [toHours, toMinutes] = addTimeToRef.current.value.split(':').map(Number);
+
+            const fromTotalMinutes = fromHours * 60 + fromMinutes;
+            const toTotalMinutes = toHours * 60 + toMinutes;
+
+            if (fromTotalMinutes >= toTotalMinutes) {
+                console.log('Incorrect time range specified');
+                return;
+            }
+            const timeDifference = toTotalMinutes - fromTotalMinutes;
+
+            onAddRangeOfTime(index, timeDifference);
+        }
+    }
+
     return(
-        <div className="h-full flex ">
+        <div className="h-full flex w-1/3">
             <div className="text-center w-full">
                 <div className='bg-slate-300 h-16 flex justify-center items-center pt-2'>
                    <h3>{timerConfiguration.timerName}</h3> 
@@ -30,8 +59,10 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer, inde
                 <div className='h-1/4 pt-4 mt-1'>
                     <h4>Rotation time: </h4>
                     <div className="flex items-center justify-center">
-                        <input type="text" defaultValue={timerConfiguration.rotationTime/60} className='shadow-sm appearance-none border rounded h-10 px-2 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-3/12'/>
-                        <button className='shadow-sm btn btn-success btn-sm h-10 px-3 ms-2 ' type='button'>
+                        <input type="text" defaultValue={timerConfiguration.rotationTime/60} className='shadow-sm appearance-none border rounded h-10 px-2 text-center text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-3/12'
+                        ref={rotationTimeRef}
+                        />
+                        <button className='shadow-sm btn btn-success btn-sm h-10 px-3 ms-2 ' type='button' onClick={handleChangeRotateTime}>
                             Save
                         </button>
                     </div>
@@ -39,18 +70,22 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer, inde
                 <div className='h-1/4 pt-4'>
                     <h4>Add time: <span className='text-xs'>(HH:MM)</span></h4>
                     <div className="flex items-center justify-center flex-col">
-                        <div className='flex w-4/5'>
+                        <div className='flex w-[90%]'>
                             <input
-                                type="text"
-                                className='form-control form-control-sm me-2 py-2 shadow-sm'
+                                type="time"
+                                className='form-control form-control-sm me-2 py-2 shadow-sm '
                                 placeholder="From:"
+                                ref={addTimeFromRef}
                             />
                             <input
-                                type="text"
+                                type="time"
                                 className='form-control form-control-sm py-2 shadow-sm'
                                 placeholder="To:"
+                                ref={addTimeToRef}
                             /> 
-                            <button className='shadow-sm btn btn-primary btn-sm h-10 px-3 ms-2 ' type='button'>
+                            <button className='shadow-sm btn btn-primary btn-sm h-10 px-3 ms-2 ' type='button'
+                                onClick={handleAddRangeOfTime}
+                            >
                                 Save
                             </button>
                         </div>
@@ -63,9 +98,12 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer, inde
                             <input
                                 type="color"
                                 className='form-control form-control-sm me-2 py-2 shadow-sm h-10'
-                                defaultValue={`#${timerConfiguration.timerColor}`}
+                                defaultValue={timerConfiguration.timerColor}
+                                ref={colorRef}
                             />
-                            <button className='shadow-sm btn btn-success btn-sm h-10 px-3 ms-2 ' type='button'>
+                            <button className='shadow-sm btn btn-success btn-sm h-10 px-3 ms-2 ' type='button'
+                            onClick={handleChangeColor}
+                            >
                                 Save
                             </button>
                         </div>

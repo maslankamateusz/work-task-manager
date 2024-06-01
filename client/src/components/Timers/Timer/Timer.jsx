@@ -7,7 +7,7 @@ const Circle = styled(({ dashOffset, timerColor, ...rest }) => <circle {...rest}
   stroke-dasharray: 283;
   stroke-dashoffset: ${({ dashOffset }) => dashOffset};
   transition: stroke-dashoffset 1s linear;
-  stroke: ${({ timerColor }) => `#${timerColor}`};
+  stroke: ${({ timerColor }) => `${timerColor}`};
   stroke-width: 5;
   fill: none;
   stroke-linecap: round;

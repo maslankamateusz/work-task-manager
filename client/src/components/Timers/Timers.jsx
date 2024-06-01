@@ -70,7 +70,7 @@ function Timers(){
     const timerModalToggle = () => {
         timerModal.current.showModal();
     }
-    const resetTimer = async (index) => {
+    const updateDailyTimers = async (index, newElapsedTime, newRotationTime) => {
         try {
             console.log(timerConfiguration[index].rotationTime);
             const response = await fetch('http://localhost:5000/api/daysummary/timers', {
@@ -79,29 +79,94 @@ function Timers(){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    elapsedTime: 0,
-                    rotationTime: timerConfiguration[index].rotationTime,
-                    timerKey: index
+                    timerKey: index,
+                    elapsedTime: newElapsedTime,
+                    rotationTime: newRotationTime
                 }),
             });
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to update timers');
             }
+            return response.ok;
         } catch (error) {
             console.error('Error updating timers:', error.message);
         }
+    }
+    const resetTimer = async (index) => {
+        const response = updateDailyTimers(index, 0, timerConfiguration[index].rotationTime);
+        if(response){
+           const updatedTimerConfiguration = [...timerConfiguration];
+            updatedTimerConfiguration[index] = {
+                ...updatedTimerConfiguration[index],
+                elapsedTime: 0
+            };
+            setTimerConfiguration(updatedTimerConfiguration); 
+        }
+      };
+    const addRangeOfTime = async (index, timeDifference) =>{
+        const newElapsedTime = timerConfiguration[index].elapsedTime + (timeDifference * 60);
+        const response = updateDailyTimers(index, newElapsedTime, timerConfiguration[index].rotationTime);
+        if(response){
+            const updatedTimerConfiguration = [...timerConfiguration];
+             updatedTimerConfiguration[index] = {
+                 ...updatedTimerConfiguration[index],
+                 elapsedTime: newElapsedTime
+             };
+             setTimerConfiguration(updatedTimerConfiguration); 
+         }
+    }
+
+    const updateTimersConfig = async (index, newName, newRotationTime, newColor) => {
+    try {
+        const response = await fetch('http://localhost:5000/api/timers/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                timerKey: index,
+                timerName: newName,
+                rotationTime: Number(newRotationTime),
+                timerColor: newColor
+            }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to update timers');
+        }
+        return response.ok;
+    } catch (error) {
+        console.error('Error updating timers:', error.message);
+    }
+    }
+    const changeRotateTime = async (index, newRotationTime) => {
+    const response = updateTimersConfig(index, timerConfiguration[index].timerName, newRotationTime, timerConfiguration[index].timerColor);
+    if(response){
         const updatedTimerConfiguration = [...timerConfiguration];
         updatedTimerConfiguration[index] = {
-            ...updatedTimerConfiguration[index],
-            elapsedTime: 0
+        ...updatedTimerConfiguration[index],
+        rotationTime: Number(newRotationTime)
         };
-        setTimerConfiguration(updatedTimerConfiguration);
-      };
+        setTimerConfiguration(updatedTimerConfiguration); 
+    }
     
+    };
+    const changeColor = async (index, newColor) => {
+    const response = updateTimersConfig(index, timerConfiguration[index].timerName, timerConfiguration[index].rotationTime, newColor);
+    if(response){
+        const updatedTimerConfiguration = [...timerConfiguration];
+        updatedTimerConfiguration[index] = {
+        ...updatedTimerConfiguration[index],
+        timerColor: newColor
+        };
+        setTimerConfiguration(updatedTimerConfiguration); 
+    }
+    };
+
     return (
         <>
-            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer}/>
+            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
                 {console.log("sprawd", timerConfiguration)}
