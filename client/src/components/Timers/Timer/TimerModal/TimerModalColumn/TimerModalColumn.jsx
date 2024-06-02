@@ -17,7 +17,11 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        let elapsedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        if(isNaN(minutes) || isNaN(seconds)){
+            elapsedTime = "00:00";
+        }
+        return elapsedTime;
     };
 
     const handleChangeRotateTime = () => {
@@ -46,7 +50,7 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
         }
     }
     let width = "w-full";
-    let backgroundWidth;
+    let backgroundWidth = "15";
     switch(amountOfTimer){
         case 1:
             width = "w-full";
@@ -71,7 +75,7 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
             <div className="text-center w-1-3">
                 <div className='z-10 h-16 flex justify-center items-center pt-2'>
                    <input type="text" id="timerName" className="border-none bg-transparent fs-3 font-medium text-center outline-none" 
-                   maxlength="20"
+                   maxLength="20"
                    ref={timerNameRef}
                    defaultValue={timerConfiguration.timerName}
                    onBlur={handleTimerNameChange}/>
@@ -96,7 +100,7 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
                 <div className='h-1/4 pt-4'>
                     <h4>Add time: <span className='text-xs'>(HH:MM)</span></h4>
                     <div className="flex items-center justify-center flex-col">
-                        <div className='flex w-[90%]'>
+                        <div className='flex w-[75%]'>
                             <input
                                 type="time"
                                 className='form-control form-control-sm me-2 py-2 shadow-sm '

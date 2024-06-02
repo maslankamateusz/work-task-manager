@@ -174,12 +174,64 @@ function Timers(){
             setTimerConfiguration(updatedTimerConfiguration); 
         }
     }
+    const deleteTimer = async (timerIndex) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/timers/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    timerKey: timerIndex,
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update timers');
+            }
+            const updatedTimerConfiguration = [...timerConfiguration];
+            updatedTimerConfiguration.splice(timerIndex, 1);
+            setTimerConfiguration(updatedTimerConfiguration);
+            return response.ok;
+        } catch (error) {
+            console.error('Error updating timers:', error.message);
+        }
+    }
+
+    const addTimer = async () => {
+
+        if(timerConfiguration.length<3){
+            try {
+                const response = await fetch('http://localhost:5000/api/timers/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to update timers');
+                }
+                const newTimer = {
+                    timerName: "Add name",
+                    rotationTime: 3600,
+                    timerColor: "#007bff"
+                }
+                const updatedTimerConfiguration = timerConfiguration.concat(newTimer);
+                setTimerConfiguration(updatedTimerConfiguration);
+
+                return response.ok;
+            } catch (error) {
+                console.error('Error updating timers:', error.message);
+            }
+        }
+        }
+       
     return (
         <>
-            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime} onChangeTimerName={changeTimerName}/>
+            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime} onChangeTimerName={changeTimerName} onDeleteTimer={deleteTimer} onAddTimer={addTimer}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
-                {console.log("sprawd", timerConfiguration)}
                 {timerConfiguration.map((timer, index) => (
                     <Timer key={index} timerKey={index} title={timer.timerName} fullRotationTime={timer.rotationTime} elapsedTime={timer.elapsedTime} timerColor={timer.timerColor} onSaveDate={(timerState) => saveDate(timerState, index)} />
                 ))}
