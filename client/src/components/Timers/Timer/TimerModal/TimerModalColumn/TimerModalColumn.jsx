@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function TimerModalColumn({timerConfiguration, onResetTimer,onChangeRotateTime, onChangeColor, onAddRangeOfTime, index  }){
+export default function TimerModalColumn({timerConfiguration, onResetTimer,onChangeRotateTime, onChangeColor, onAddRangeOfTime, amountOfTimer, onChangeTimerName, index  }){
+    
+    const timerNameRef = useRef(null);
     const rotationTimeRef = useRef(null);
     const colorRef = useRef(null);
     const addTimeFromRef = useRef(null);
@@ -43,12 +45,36 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
             onAddRangeOfTime(index, timeDifference);
         }
     }
+    let width = "w-full";
+    let backgroundWidth;
+    switch(amountOfTimer){
+        case 1:
+            width = "w-full";
+            backgroundWidth = "45";
+            break;
+        case 2:
+            width = "w-1/2";
+            backgroundWidth = "22.5";
+            break
+        case 3:
+            width = "w-1/3";
+            backgroundWidth = "15";
+            break
+    }
+    const handleTimerNameChange = () => {
+        onChangeTimerName(index, timerNameRef.current.value);
+    }
 
     return(
-        <div className="h-full flex w-1/3">
-            <div className="text-center w-full">
-                <div className='bg-slate-300 h-16 flex justify-center items-center pt-2'>
-                   <h3>{timerConfiguration.timerName}</h3> 
+        <div className={`h-full flex justify-center ${width}`}>
+            <div className={`fixed bg-slate-300 h-16 w-[${backgroundWidth}%] -z-10`}></div>
+            <div className="text-center w-1-3">
+                <div className='z-10 h-16 flex justify-center items-center pt-2'>
+                   <input type="text" id="timerName" className="border-none bg-transparent fs-3 font-medium text-center outline-none" 
+                   maxlength="20"
+                   ref={timerNameRef}
+                   defaultValue={timerConfiguration.timerName}
+                   onBlur={handleTimerNameChange}/>
                 </div>
                 <div className='h-[5%] pt-2'>
                     <div className="flex items-center justify-center">

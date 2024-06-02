@@ -141,32 +141,42 @@ function Timers(){
     }
     }
     const changeRotateTime = async (index, newRotationTime) => {
-    const response = updateTimersConfig(index, timerConfiguration[index].timerName, newRotationTime, timerConfiguration[index].timerColor);
-    if(response){
-        const updatedTimerConfiguration = [...timerConfiguration];
-        updatedTimerConfiguration[index] = {
-        ...updatedTimerConfiguration[index],
-        rotationTime: Number(newRotationTime)
-        };
-        setTimerConfiguration(updatedTimerConfiguration); 
-    }
+        const response = updateTimersConfig(index, timerConfiguration[index].timerName, newRotationTime, timerConfiguration[index].timerColor);
+        if(response){
+            const updatedTimerConfiguration = [...timerConfiguration];
+            updatedTimerConfiguration[index] = {
+            ...updatedTimerConfiguration[index],
+            rotationTime: Number(newRotationTime)
+            };
+            setTimerConfiguration(updatedTimerConfiguration); 
+        }
     
     };
     const changeColor = async (index, newColor) => {
-    const response = updateTimersConfig(index, timerConfiguration[index].timerName, timerConfiguration[index].rotationTime, newColor);
-    if(response){
-        const updatedTimerConfiguration = [...timerConfiguration];
-        updatedTimerConfiguration[index] = {
-        ...updatedTimerConfiguration[index],
-        timerColor: newColor
-        };
-        setTimerConfiguration(updatedTimerConfiguration); 
-    }
+        const response = updateTimersConfig(index, timerConfiguration[index].timerName, timerConfiguration[index].rotationTime, newColor);
+        if(response){
+            const updatedTimerConfiguration = [...timerConfiguration];
+            updatedTimerConfiguration[index] = {
+            ...updatedTimerConfiguration[index],
+            timerColor: newColor
+            };
+            setTimerConfiguration(updatedTimerConfiguration); 
+        }
     };
-
+    const changeTimerName = async (index, newTimerName) => {
+        const response = updateTimersConfig(index, newTimerName, timerConfiguration[index].rotationTime, timerConfiguration[index].timerColor);
+        if(response){
+            const updatedTimerConfiguration = [...timerConfiguration];
+            updatedTimerConfiguration[index] = {
+            ...updatedTimerConfiguration[index],
+            timerName: newTimerName
+            };
+            setTimerConfiguration(updatedTimerConfiguration); 
+        }
+    }
     return (
         <>
-            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime}/>
+            <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime} onChangeTimerName={changeTimerName}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
                 {console.log("sprawd", timerConfiguration)}
