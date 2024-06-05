@@ -6,7 +6,7 @@ import Checklist from '../Checklist/Checklist';
 
 function Main(){
     return (
-        <div className='mainContainer flex md:flex-row bg-gray-200'>
+        <div className='mainContainer flex md:flex-row mt-1 bg-gray-200'>
           <div className='leftZone leftFirstZone  md:w-1/2 flex flex-col justify-between items-center '>
             <Timers />
           <div className="leftSecondZone md:w-full h-full flex ">
