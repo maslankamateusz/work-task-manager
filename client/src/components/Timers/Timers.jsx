@@ -72,7 +72,6 @@ function Timers(){
     }
     const updateDailyTimers = async (index, newElapsedTime, newRotationTime) => {
         try {
-            console.log(timerConfiguration[index].rotationTime);
             const response = await fetch('http://localhost:5000/api/daysummary/timers', {
                 method: 'POST',
                 headers: {
@@ -141,12 +140,13 @@ function Timers(){
     }
     }
     const changeRotateTime = async (index, newRotationTime) => {
-        const response = updateTimersConfig(index, timerConfiguration[index].timerName, newRotationTime, timerConfiguration[index].timerColor);
+        const newRotationTimeSeconds = newRotationTime * 60;
+        const response = updateTimersConfig(index, timerConfiguration[index].timerName, newRotationTimeSeconds, timerConfiguration[index].timerColor);
         if(response){
             const updatedTimerConfiguration = [...timerConfiguration];
             updatedTimerConfiguration[index] = {
             ...updatedTimerConfiguration[index],
-            rotationTime: Number(newRotationTime)
+            rotationTime: Number(newRotationTimeSeconds)
             };
             setTimerConfiguration(updatedTimerConfiguration); 
         }
@@ -212,9 +212,11 @@ function Timers(){
                 if (!response.ok) {
                     throw new Error(data.message || 'Failed to update timers');
                 }
+
                 const newTimer = {
                     timerName: "Add name",
                     rotationTime: 3600,
+                    elapsedTime: 0,
                     timerColor: "#007bff"
                 }
                 const updatedTimerConfiguration = timerConfiguration.concat(newTimer);

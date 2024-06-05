@@ -54,7 +54,7 @@ router.post('/update', async (req, res) => {
             { 
                 $set: { 
                     [`timers.${index}.timerName`]: newName,
-                    [`timers.${index}.rotationTime`]: newRotationTime * 60,
+                    [`timers.${index}.rotationTime`]: newRotationTime,
                     [`timers.${index}.timerColor`]: newColor,
                 } 
             } 

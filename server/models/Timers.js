@@ -7,17 +7,17 @@ const timersSchema = new mongoose.Schema({
             {
                 timerName: "Work",
                 rotationTime: 3600,
-                timerColor: "007bff"
+                timerColor: "#007bff"
             },
             {
                 timerName: "School",
                 rotationTime: 3600,
-                timerColor: "007bff"
+                timerColor: "#007bff"
             },
             {
                 timerName: "Learn",
                 rotationTime: 3600,
-                timerColor: "007bff"
+                timerColor: "#007bff"
             }
         ]
     }

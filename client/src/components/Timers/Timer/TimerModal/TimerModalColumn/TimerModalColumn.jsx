@@ -54,26 +54,25 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
     switch(amountOfTimer){
         case 1:
             width = "w-full";
-            backgroundWidth = "45";
+            backgroundWidth = "w-[45%]";
             break;
         case 2:
             width = "w-1/2";
-            backgroundWidth = "22.5";
+            backgroundWidth = "w-[22.5%]";
             break
         case 3:
             width = "w-1/3";
-            backgroundWidth = "15";
+            backgroundWidth = "w-[15%]";
             break
     }
     const handleTimerNameChange = () => {
         onChangeTimerName(index, timerNameRef.current.value);
     }
-
     return(
         <div className={`h-full flex justify-center ${width}`}>
-            <div className={`fixed bg-slate-300 h-16 w-[${backgroundWidth}%] -z-10`}></div>
-            <div className="text-center w-1-3">
-                <div className='z-10 h-16 flex justify-center items-center pt-2'>
+            <div className={`fixed -z-10 bg-slate-300 h-16 ${backgroundWidth} `}></div>
+            <div className="text-center  w-1-3">
+                <div className='z-10 h-16 flex justify-center items-center pt-2 '>
                    <input type="text" id="timerName" className="border-none bg-transparent fs-3 font-medium text-center outline-none" 
                    maxLength="20"
                    ref={timerNameRef}

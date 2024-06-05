@@ -8,10 +8,15 @@ const daySummary = require('./routes/daySummaryRoutes');
 const notes = require('./routes/notesRoutes');
 const timers = require('./routes/timersRoutes');
 
+require('dotenv').config();
+
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/work-task-manager', { useNewUrlParser: true, useUnifiedTopology: true });
+const uri = `mongodb+srv://mateuszmaslanka06:${process.env.MONGODB_PASSWORD}@cluster0.zui1ma9.mongodb.net/work-task-manager`;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', function() {
