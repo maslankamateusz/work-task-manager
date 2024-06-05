@@ -27,6 +27,21 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/timersdata', async (req, res) => {
+    const formattedDate = getTodayDate();
+
+    try {
+        let entry = await DaySummary.findOne({ date: formattedDate });
+        if (!entry) {
+            entry = new DaySummary({ date: formattedDate });
+            entry = await entry.save();
+         }
+        res.json(entry.timers);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Wystąpił błąd serwera' });
+    }
+});
 
 router.post('/checklistsummary', async (req, res) => {
     try {
@@ -118,7 +133,50 @@ router.post('/additionalNotes', async (req, res) => {
     }catch(err){
         res.status(400).json({message: err.message})
     }
-})
+});
+
+router.post('/timers', async (req, res) => {
+    try {
+        const formattedDate = getTodayDate();
+        const daySummary = await DaySummary.findOne({ date: formattedDate });
+
+        if (!daySummary) {
+            return res.status(404).json({ message: 'Day summary not found for the current date' });
+        }
+
+        if (req.body.timerKey === undefined || req.body.elapsedTime === undefined || req.body.rotationTime === undefined) {
+            return res.status(400).json({ message: 'timerKey, elapsedTime, and rotationTime are required' });
+        }
+        
+
+        const timerKey = req.body.timerKey;
+        const elapsedTime = req.body.elapsedTime;
+        const rotationTime = req.body.rotationTime;
+
+        if (typeof timerKey !== 'number' || timerKey < 0 || timerKey >= daySummary.timers.length) {
+            return res.status(400).json({ message: 'Invalid timerKey' });
+        }
+
+        await DaySummary.updateOne(
+            { _id: daySummary._id }, 
+            { 
+                $set: { 
+                    [`timers.${timerKey}.durationTime`]: elapsedTime,
+                    [`timers.${timerKey}.rotationTime`]: rotationTime
+                } 
+            } 
+        );
+
+        res.status(200).json({ message: 'Timer updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+
+
 
 
 module.exports = router;
