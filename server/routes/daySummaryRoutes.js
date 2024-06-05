@@ -27,6 +27,8 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+
 router.get('/timersdata', async (req, res) => {
     const formattedDate = getTodayDate();
 

@@ -7,6 +7,9 @@ import Checklist from '../Checklist/Checklist';
 function Main(){
     return (
         <div className='mainContainer flex md:flex-row mt-1 bg-gray-200'>
+          {/* <button className='absolute shadow-sm btn btn-success btn-sm h-10 px-3 ms-2 ' type='button'>
+              Save
+          </button> */}
           <div className='leftZone leftFirstZone  md:w-1/2 flex flex-col justify-between items-center '>
             <Timers />
           <div className="leftSecondZone md:w-full h-full flex ">
