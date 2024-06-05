@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
+import WeatherInfo from './WeatherInfo/WeatherInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCloud } from '@fortawesome/free-solid-svg-icons'; 
+import { getWeekdayName, formatDate, formatTime } from './HeaderUtils/headerUtils';
 
 
 function Header() {
@@ -16,9 +20,20 @@ function Header() {
     }, []); 
 
     return (
-      <div className="header h-44 w-full flex justify-center items-center flex-col md:flex-row">
-        <span className="text-5xl text-center md:text-7xl px-5 mb-3 md:mb-0">Hello, today is a {weekdayName}</span>
-        <span className="text-4xl md:text-6xl mb-1 px-5 ">{todayDate} {time}</span>
+      <div className="header h-48 w-full flex justify-center items-start flex-col md:flex-col">
+        <div className='mt-5 w-full h-44 flex justify-center'>
+            <span className="text-5xl text-center md:text-7xl px-5  md:mb-0">Hello, today is a {weekdayName}</span>
+            <span className="text-4xl mt-[12px] md:text-6xl px-5 ">{todayDate} {time}</span>
+        </div>
+        <div className='w-full flex justify-end'>
+            <div className='h-[7vh] w-1/3 me-[5vw] mb-2 text-center '>
+                
+                {/* <FontAwesomeIcon icon={faCloud} size='3x'/> */}
+                <WeatherInfo />
+                </div>
+            
+        </div>
+
       </div>   
 
     
@@ -26,27 +41,5 @@ function Header() {
       
 }
 
-function getWeekdayName() {
-    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const date = new Date();
-    const weekday = date.getDay();
-    return weekdays[weekday];
-}
-
-function formatDate() {
-    const date = new Date();
-    const day = ('0' + date.getDate()).slice(-2);
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-}
-
-function formatTime() {
-    const date = new Date();
-    const hours = ('0' + date.getHours()).slice(-2);
-    const minutes = ('0' + date.getMinutes()).slice(-2);
-    const time = `${hours}:${minutes}`;
-    return time;
-}
 
 export default Header;
