@@ -174,6 +174,39 @@ router.post('/timers', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+router.post('/dateRange', async (req, res) => {
+    const { fromDate, toDate } = req.body;
+
+    if (!fromDate || !toDate) {
+        return res.status(400).json({ message: 'Both fromDate and toDate are required' });
+    }
+
+    try {
+        const convertDate = (dateStr) => {
+            const [year, month, day] = dateStr.split('-');
+            const paddedDay = day.padStart(2, '0');
+            const paddedMonth = month.padStart(2, '0');
+            return `${paddedDay}.${paddedMonth}.${year}`;
+        };
+
+        const fromDateString = convertDate(fromDate);
+        const toDateString = convertDate(toDate);
+        console.log(fromDateString);
+        console.log(toDateString);
+        const summaries = await DaySummary.find({
+            date: {
+                $gte: fromDateString,
+                $lte: toDateString
+            }
+        });
+
+        res.json(summaries);
+    } catch (err) {
+        console.error(`Error fetching summaries: ${err.message}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 
 
