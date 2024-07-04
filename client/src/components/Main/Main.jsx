@@ -4,6 +4,8 @@ import Notes from '../Notes/Notes';
 import Tasks from '../Tasks/Tasks';
 import Checklist from '../Checklist/Checklist';
 
+import { TimersContextProvider } from "../../contexts/Timers/TimersContextProvider";
+
 function Main(){
     return (
         <div className='mainContainer flex md:flex-row mt-1 bg-gray-200'>
@@ -11,7 +13,9 @@ function Main(){
               Save
           </button> */}
           <div className='leftZone leftFirstZone  md:w-1/2 flex flex-col justify-between items-center '>
-            <Timers />
+            <TimersContextProvider>
+              <Timers />
+            </TimersContextProvider>
           <div className="leftSecondZone md:w-full h-full flex ">
             <Notes />
             <Checklist />

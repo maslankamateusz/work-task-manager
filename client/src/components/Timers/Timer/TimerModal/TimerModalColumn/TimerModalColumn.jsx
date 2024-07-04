@@ -1,17 +1,24 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { TimersContext } from "../../../../../contexts/Timers/TimersContextProvider";
 
+export default function TimerModalColumn({timerConfiguration, amountOfTimer, index  }){
+    const { 
+        resetTimer,
+        changeRotateTime,
+        changeColor,
+        changeTimerName,
+        addRangeOfTime,
+    } = useContext(TimersContext);
 
-export default function TimerModalColumn({timerConfiguration, onResetTimer,onChangeRotateTime, onChangeColor, onAddRangeOfTime, amountOfTimer, onChangeTimerName, index  }){
-    
     const timerNameRef = useRef(null);
     const rotationTimeRef = useRef(null);
     const colorRef = useRef(null);
     const addTimeFromRef = useRef(null);
     const addTimeToRef = useRef(null);
     const handleResetTimer = () => {
-        onResetTimer(index);
+        resetTimer(index);
     };
 
     const formatTime = (time) => {
@@ -25,10 +32,10 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
     };
 
     const handleChangeRotateTime = () => {
-        onChangeRotateTime(index, rotationTimeRef.current.value);
+        changeRotateTime(index, rotationTimeRef.current.value);
     }
     const handleChangeColor = () => {
-        onChangeColor(index, colorRef.current.value);
+        changeColor(index, colorRef.current.value);
     }
 
     const handleAddRangeOfTime = () => {
@@ -46,7 +53,7 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
             }
             const timeDifference = toTotalMinutes - fromTotalMinutes;
 
-            onAddRangeOfTime(index, timeDifference);
+            addRangeOfTime(index, timeDifference);
         }
     }
     let width = "w-full";
@@ -66,7 +73,7 @@ export default function TimerModalColumn({timerConfiguration, onResetTimer,onCha
             break
     }
     const handleTimerNameChange = () => {
-        onChangeTimerName(index, timerNameRef.current.value);
+        changeTimerName(index, timerNameRef.current.value);
     }
     return(
         <div className={`h-full flex justify-center ${width}`}>
