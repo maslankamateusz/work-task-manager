@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import TimerIcon from './TimerIcon/TimerIcon.jsx';
 import TimerDescription from './TimerDescription/TimerDescription.jsx';
+
 
 const Circle = styled(({ dashOffset, timerColor, ...rest }) => <circle {...rest} />)`
   stroke-dasharray: 283;

@@ -3,6 +3,8 @@ import Timer from "./Timer/Timer";
 import TimerConfiBtn from "./Timer/TimerConfig/TimerConfigBtn";
 import TimerModal from "./Timer/TimerModal/TimerModal";
 
+import { TimersContextProvider } from "../../contexts/Timers/TimersContextProvider";
+
 function Timers(){
 
     const [ timerConfiguration, setTimerConfiguration ] = useState([]);
@@ -230,7 +232,7 @@ function Timers(){
         }
        
     return (
-        <>
+        <TimersContextProvider>
             <TimerModal ref={timerModal} timerConfiguration={timerConfiguration} onResetTimer={resetTimer} onChangeRotateTime={changeRotateTime} onChangeColor={changeColor} onAddRangeOfTime={addRangeOfTime} onChangeTimerName={changeTimerName} onDeleteTimer={deleteTimer} onAddTimer={addTimer}/>
             <div className='mb-4 lg:mb-0 bg-indigo-300 h-52 w-full p-1 flex'>
                 <div className="w-[95%] h-52 flex justify-center items-center">
@@ -242,7 +244,7 @@ function Timers(){
             <div className="absolute text-right w-[43%] p-1 pe-2 align-top mb-10">
                 <TimerConfiBtn handleClick={timerModalToggle}/>
             </div>
-        </>
+        </TimersContextProvider>
         )
 }
 
